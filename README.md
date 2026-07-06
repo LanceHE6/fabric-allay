@@ -1,4 +1,6 @@
-<img src="https://socialify.git.ci/LanceHE6/fabric-allay/image?font=Raleway&forks=1&issues=1&language=1&logo=https%3A%2F%2Fr2-api.hycer.cn%2Fimg%2Ffabric-allay-icon.png&name=1&pattern=Floating+Cogs&stargazers=1&theme=Dark" alt="fabric-allay" width="640" height="320" />
+<p align="center">
+<img src="https://socialify.git.ci/LanceHE6/fabric-allay/image?font=JetBrains+Mono&forks=1&issues=1&language=1&logo=https%3A%2F%2Fr2-api.hycer.cn%2Fimg%2Ffabric-allay-icon.png&name=1&pattern=Floating+Cogs&stargazers=1&theme=Dark" alt="fabric-allay" width="640" height="320" />
+</p>
 
 一个 Minecraft Fabric 服务端辅助模组，集成 AdvancedScoreboard、CarpetBotManager、TrialKeeper 三大模块，通过统一的 `/allay` 指令系统提供计分板管理、假人管理、试炼方块保存功能。
 
