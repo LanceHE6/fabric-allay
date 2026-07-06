@@ -42,11 +42,14 @@ public class CustomScoreboardRenderer {
         try {
             var config = AllayConfig.getInstance();
             var scoreboard = AdvancedScoreboardModule.scoreboard;
+            String objName = getObjectiveId(player);
+            boolean isNew = scoreboard.getObjective(objName) == null;
             Objective obj = ensureObjective(player);
             UUID uuid = player.getUUID();
 
             obj.setDisplayName(Component.literal(config.getFormattedDisplayName(item)));
-            player.connection.send(new ClientboundSetObjectivePacket(obj, ClientboundSetObjectivePacket.METHOD_ADD));
+            int method = isNew ? ClientboundSetObjectivePacket.METHOD_ADD : ClientboundSetObjectivePacket.METHOD_CHANGE;
+            player.connection.send(new ClientboundSetObjectivePacket(obj, method));
 
             List<String> oldHolders = playerScoreHolders.getOrDefault(uuid, List.of());
             for (String holderName : oldHolders) {
