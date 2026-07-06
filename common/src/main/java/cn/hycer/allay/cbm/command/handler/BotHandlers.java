@@ -1,6 +1,6 @@
 package cn.hycer.allay.cbm.command.handler;
 
-import cn.hycer.allay.AllayConfig;
+import cn.hycer.allay.config.AllayConfig;
 import cn.hycer.allay.cbm.command.BotSpawner;
 import cn.hycer.allay.cbm.data.BotDataManager;
 import cn.hycer.allay.cbm.model.BotGroup;

@@ -1,6 +1,6 @@
 package cn.hycer.allay.asb.event;
 
-import cn.hycer.allay.AllayConfig;
+import cn.hycer.allay.config.AllayConfig;
 import cn.hycer.allay.asb.AdvancedScoreboardModule;
 import cn.hycer.allay.asb.render.CustomScoreboardRenderer;
 import cn.hycer.allay.asb.task.Task;

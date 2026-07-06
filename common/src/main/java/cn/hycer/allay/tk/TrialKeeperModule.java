@@ -1,6 +1,6 @@
 package cn.hycer.allay.tk;
 
-import cn.hycer.allay.AllayConfig;
+import cn.hycer.allay.config.AllayConfig;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 
 public class TrialKeeperModule {

@@ -1,6 +1,6 @@
 package cn.hycer.allay.asb.command;
 
-import cn.hycer.allay.AllayConfig;
+import cn.hycer.allay.config.AllayConfig;
 import cn.hycer.allay.asb.config.ScoreboardItem;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;

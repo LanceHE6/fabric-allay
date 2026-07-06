@@ -1,6 +1,6 @@
 package cn.hycer.allay.cbm.command.handler;
 
-import cn.hycer.allay.AllayConfig;
+import cn.hycer.allay.config.AllayConfig;
 import cn.hycer.allay.cbm.data.BotDataManager;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;

@@ -1,6 +1,6 @@
 package cn.hycer.allay.cbm.command;
 
-import cn.hycer.allay.AllayConfig;
+import cn.hycer.allay.config.AllayConfig;
 import cn.hycer.allay.cbm.data.BotDataManager;
 import cn.hycer.allay.cbm.model.BotPreset;
 import net.minecraft.commands.CommandSourceStack;

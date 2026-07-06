@@ -1,14 +1,12 @@
 package cn.hycer.allay.cbm.data;
 
-import cn.hycer.allay.AllayConfig;
+import cn.hycer.allay.config.AllayConfig;
+import cn.hycer.allay.config.CbmSection;
 import cn.hycer.allay.cbm.model.BotGroup;
 import cn.hycer.allay.cbm.model.BotPreset;
 
 import java.util.*;
 
-/**
- * Manages bot presets and groups, persisted via AllayConfig into allay.json.
- */
 public class BotDataManager {
 
     private static final BotDataManager INSTANCE = new BotDataManager();
@@ -19,11 +17,9 @@ public class BotDataManager {
         return INSTANCE;
     }
 
-    private AllayConfig.CbmSection cbm() {
+    private CbmSection cbm() {
         return AllayConfig.getInstance().getCbm();
     }
-
-    // === Bot Presets ===
 
     public void addBotPreset(BotPreset preset) {
         cbm().getBots().put(preset.getName(), preset);
@@ -49,8 +45,6 @@ public class BotDataManager {
     public boolean hasBotPreset(String name) {
         return cbm().getBots().containsKey(name);
     }
-
-    // === Bot Groups ===
 
     public void addBotGroup(BotGroup group) {
         cbm().getGroups().put(group.getName(), group);

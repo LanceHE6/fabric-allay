@@ -1,6 +1,6 @@
 package cn.hycer.allay.asb.event;
 
-import cn.hycer.allay.AllayConfig;
+import cn.hycer.allay.config.AllayConfig;
 import cn.hycer.allay.asb.task.Task;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;

@@ -1,4 +1,4 @@
-package cn.hycer.allay;
+package cn.hycer.allay.config;
 
 import cn.hycer.allay.asb.config.ScoreboardItem;
 import cn.hycer.allay.cbm.model.BotGroup;
@@ -59,141 +59,8 @@ public class AllayConfig {
     private TkSection trialKeeper = new TkSection();
 
     // ═══════════════════════════════════════════════════════════
-    //  Inner section classes
-    // ═══════════════════════════════════════════════════════════
-
-    public static class AsbSection {
-        private String border = "===";
-        private int switchInterval = 5;
-        private int saveInterval = 5;
-        private int maxDisplayNum = 15;
-        private Set<String> hiddenScoreboards = new HashSet<>();
-        private List<ScoreboardItem> scoreboards = new ArrayList<>();
-
-        public String getBorder() { return border; }
-        public void setBorder(String v) { this.border = v != null ? v : "==="; }
-
-        public int getSwitchInterval() { return switchInterval; }
-        public void setSwitchInterval(int v) { this.switchInterval = Math.max(1, v); }
-
-        public int getSaveInterval() { return saveInterval; }
-        public void setSaveInterval(int v) { this.saveInterval = Math.max(1, v); }
-
-        public int getMaxDisplayNum() { return maxDisplayNum; }
-        public void setMaxDisplayNum(int v) { this.maxDisplayNum = Math.max(1, v); }
-
-        public List<ScoreboardItem> getScoreboards() { return scoreboards; }
-        public void setScoreboards(List<ScoreboardItem> v) { this.scoreboards = v != null ? v : new ArrayList<>(); }
-
-        public Set<String> getHiddenScoreboards() { return hiddenScoreboards; }
-        public void setHiddenScoreboards(Set<String> v) { this.hiddenScoreboards = v != null ? v : new HashSet<>(); }
-
-        public boolean toggleScoreboardVisibility(String internalName) {
-            if (hiddenScoreboards.contains(internalName)) {
-                hiddenScoreboards.remove(internalName);
-                return false;
-            } else {
-                hiddenScoreboards.add(internalName);
-                return true;
-            }
-        }
-
-        public ScoreboardItem getScoreboardByInternalName(String internalName) {
-            return scoreboards.stream()
-                    .filter(item -> internalName.equals(item.getInternalName()))
-                    .findFirst().orElse(null);
-        }
-
-        public String getFormattedDisplayName(ScoreboardItem item) {
-            return border + item.getDisplayName() + border;
-        }
-
-        private void initDefaults() {
-            String[][] defaults = {
-                    {MINE_COUNT_INTERNAL_NAME, "挖掘量"},
-                    {PLACE_COUNT_INTERNAL_NAME, "放置量"},
-                    {ONLINE_TIME_INTERNAL_NAME, "在线时长(h)"},
-                    {ELYTRA_DISTANCE_INTERNAL_NAME, "飞行距离(km)"},
-                    {DAMAGE_TAKEN_INTERNAL_NAME, "受到伤害"},
-                    {DEATHS_INTERNAL_NAME, "死亡次数"},
-                    {MOB_KILLS_INTERNAL_NAME, "击杀生物数"},
-                    {LATENCY_INTERNAL_NAME, "延迟(ms)"},
-            };
-            for (String[] def : defaults) {
-                ScoreboardItem item = new ScoreboardItem();
-                item.setInternalName(def[0]);
-                item.setDisplayName(def[1]);
-                scoreboards.add(item);
-            }
-        }
-
-        private void addMissingDefaults() {
-            String[][] defaults = {
-                    {MINE_COUNT_INTERNAL_NAME, "挖掘量"},
-                    {PLACE_COUNT_INTERNAL_NAME, "放置量"},
-                    {ONLINE_TIME_INTERNAL_NAME, "在线时长(h)"},
-                    {ELYTRA_DISTANCE_INTERNAL_NAME, "飞行距离(km)"},
-                    {DAMAGE_TAKEN_INTERNAL_NAME, "受到伤害"},
-                    {DEATHS_INTERNAL_NAME, "死亡次数"},
-                    {MOB_KILLS_INTERNAL_NAME, "击杀生物数"},
-                    {LATENCY_INTERNAL_NAME, "延迟(ms)"},
-            };
-            for (String[] def : defaults) {
-                if (getScoreboardByInternalName(def[0]) == null) {
-                    ScoreboardItem item = new ScoreboardItem();
-                    item.setInternalName(def[0]);
-                    item.setDisplayName(def[1]);
-                    scoreboards.add(item);
-                    LOGGER.info("added missing default scoreboard: {} ({})", def[1], def[0]);
-                }
-            }
-        }
-    }
-
-    public static class CbmSection {
-        private int permissionLevel = 0;
-        private String botNamePrefix = "bot_";
-        private boolean requirePrefix = false;
-        private List<String> autoLoadBots = new ArrayList<>();
-        private List<String> autoLoadGroups = new ArrayList<>();
-        private LinkedHashMap<String, BotPreset> bots = new LinkedHashMap<>();
-        private LinkedHashMap<String, BotGroup> groups = new LinkedHashMap<>();
-
-        public int getPermissionLevel() { return permissionLevel; }
-        public void setPermissionLevel(int v) { this.permissionLevel = v; }
-
-        public String getBotNamePrefix() { return botNamePrefix; }
-        public void setBotNamePrefix(String v) { this.botNamePrefix = v; }
-
-        public boolean isRequirePrefix() { return requirePrefix; }
-        public void setRequirePrefix(boolean v) { this.requirePrefix = v; }
-
-        public List<String> getAutoLoadBots() { return autoLoadBots; }
-        public void setAutoLoadBots(List<String> v) { this.autoLoadBots = v != null ? v : new ArrayList<>(); }
-
-        public List<String> getAutoLoadGroups() { return autoLoadGroups; }
-        public void setAutoLoadGroups(List<String> v) { this.autoLoadGroups = v != null ? v : new ArrayList<>(); }
-
-        public LinkedHashMap<String, BotPreset> getBots() { return bots; }
-        public void setBots(LinkedHashMap<String, BotPreset> v) { this.bots = v != null ? v : new LinkedHashMap<>(); }
-
-        public LinkedHashMap<String, BotGroup> getGroups() { return groups; }
-        public void setGroups(LinkedHashMap<String, BotGroup> v) { this.groups = v != null ? v : new LinkedHashMap<>(); }
-    }
-
-    public static class TkSection {
-        /** Relative path from server directory, e.g. "config/trialkeeper_data.nbt" */
-        private String dataFile = "config/allay_trialkeeper_data.nbt";
-
-        public String getDataFile() { return dataFile; }
-        public void setDataFile(String v) { this.dataFile = v != null && !v.isEmpty() ? v : "config/allay_trialkeeper_data.nbt"; }
-    }
-
-    // ═══════════════════════════════════════════════════════════
     //  Delegating accessors
     // ═══════════════════════════════════════════════════════════
-
-    // ── ASB ───────────────────────────────────────────────────
 
     public String getBorder() { return advancedScoreboard.getBorder(); }
     public void setBorder(String v) { advancedScoreboard.setBorder(v); }
@@ -214,14 +81,9 @@ public class AllayConfig {
     public void setHiddenScoreboards(Set<String> v) { advancedScoreboard.setHiddenScoreboards(v); }
 
     public boolean toggleScoreboardVisibility(String name) { return advancedScoreboard.toggleScoreboardVisibility(name); }
-
     public ScoreboardItem getScoreboardByInternalName(String name) { return advancedScoreboard.getScoreboardByInternalName(name); }
-
     public String getFormattedDisplayName(ScoreboardItem item) { return advancedScoreboard.getFormattedDisplayName(item); }
-
     public void addMissingDefaultScoreboards() { advancedScoreboard.addMissingDefaults(); }
-
-    // ── CBM ───────────────────────────────────────────────────
 
     public int getPermissionLevel() { return carpetBotManager.getPermissionLevel(); }
     public void setPermissionLevel(int v) { carpetBotManager.setPermissionLevel(v); }
@@ -238,12 +100,8 @@ public class AllayConfig {
     public List<String> getAutoLoadGroups() { return carpetBotManager.getAutoLoadGroups(); }
     public void setAutoLoadGroups(List<String> v) { carpetBotManager.setAutoLoadGroups(v); }
 
-    // ── TK ───────────────────────────────────────────────────
-
     public String getTkDataFile() { return trialKeeper.getDataFile(); }
     public void setTkDataFile(String v) { trialKeeper.setDataFile(v); }
-
-    // ── Direct section access ─────────────────────────────────
 
     @JsonIgnore
     public AsbSection getAsb() { return advancedScoreboard; }
@@ -259,9 +117,7 @@ public class AllayConfig {
     // ═══════════════════════════════════════════════════════════
 
     public static AllayConfig getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = load();
-        }
+        if (INSTANCE == null) INSTANCE = load();
         return INSTANCE;
     }
 
@@ -280,7 +136,6 @@ public class AllayConfig {
             }
         }
 
-        // ── Migration from standalone mods ─────────────────
         AllayConfig cfg = new AllayConfig();
         cfg.configFile = file;
 
@@ -299,7 +154,26 @@ public class AllayConfig {
         return cfg;
     }
 
-    // ── Migration helpers ──────────────────────────────────────
+    public void saveConfig() {
+        if (configFile == null) {
+            configFile = FabricLoader.getInstance().getConfigDir().resolve(CONFIG_FILE_NAME).toFile();
+        }
+        try {
+            File parent = configFile.getParentFile();
+            if (parent != null && !parent.exists()) parent.mkdirs();
+            OBJECT_MAPPER.writeValue(configFile, this);
+        } catch (IOException e) {
+            LOGGER.error("Failed to save allay config: {}", e.getMessage());
+        }
+    }
+
+    @JsonIgnore
+    public File getConfigFile() { return configFile; }
+    public void setConfigFile(File f) { this.configFile = f; }
+
+    // ═══════════════════════════════════════════════════════════
+    //  Migration
+    // ═══════════════════════════════════════════════════════════
 
     private static boolean migrateFromAdvancedScoreboard(AllayConfig cfg, Path configDir) {
         Path oldFile = configDir.resolve("advanced_scoreboard.json");
@@ -423,8 +297,7 @@ public class AllayConfig {
         if (!Files.exists(oldFile)) return false;
 
         try {
-            Path newFile = configDir.resolve("allay_trialkeeper_data.nbt");
-            Files.move(oldFile, newFile, StandardCopyOption.REPLACE_EXISTING);
+            Files.move(oldFile, configDir.resolve("allay_trialkeeper_data.nbt"), StandardCopyOption.REPLACE_EXISTING);
             LOGGER.info("Renamed trialkeeper_data.nbt → allay_trialkeeper_data.nbt");
             return true;
         } catch (Exception e) {
@@ -432,24 +305,4 @@ public class AllayConfig {
             return false;
         }
     }
-
-    public void saveConfig() {
-        if (configFile == null) {
-            configFile = new File(
-                    FabricLoader.getInstance().getConfigDir().toFile(),
-                    CONFIG_FILE_NAME
-            );
-        }
-        try {
-            File parent = configFile.getParentFile();
-            if (parent != null && !parent.exists()) parent.mkdirs();
-            OBJECT_MAPPER.writeValue(configFile, this);
-        } catch (IOException e) {
-            LOGGER.error("Failed to save allay config: {}", e.getMessage());
-        }
-    }
-
-    @JsonIgnore
-    public File getConfigFile() { return configFile; }
-    public void setConfigFile(File f) { this.configFile = f; }
 }

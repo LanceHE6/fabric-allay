@@ -1,5 +1,6 @@
 package cn.hycer.allay;
 
+import cn.hycer.allay.config.AllayConfig;
 import cn.hycer.allay.asb.AdvancedScoreboardModule;
 import cn.hycer.allay.cbm.CarpetBotModule;
 import cn.hycer.allay.command.AllayCommand;

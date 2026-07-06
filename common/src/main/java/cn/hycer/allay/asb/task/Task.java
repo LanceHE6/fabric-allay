@@ -1,7 +1,7 @@
 package cn.hycer.allay.asb.task;
 
 import cn.hycer.allay.Allay;
-import cn.hycer.allay.AllayConfig;
+import cn.hycer.allay.config.AllayConfig;
 import cn.hycer.allay.asb.AdvancedScoreboardModule;
 import cn.hycer.allay.asb.config.ScoreboardItem;
 import cn.hycer.allay.asb.mixin.ServerCommonPacketListenerImplAccessor;

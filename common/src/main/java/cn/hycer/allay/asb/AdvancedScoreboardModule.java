@@ -1,7 +1,7 @@
 package cn.hycer.allay.asb;
 
 import cn.hycer.allay.Allay;
-import cn.hycer.allay.AllayConfig;
+import cn.hycer.allay.config.AllayConfig;
 import cn.hycer.allay.asb.event.PlayerBreakBlockEvent;
 import cn.hycer.allay.asb.event.PlayerKillMobEvent;
 import cn.hycer.allay.asb.event.PlayerPlaceBlockEvent;

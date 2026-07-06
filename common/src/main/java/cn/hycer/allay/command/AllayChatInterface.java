@@ -1,7 +1,7 @@
 package cn.hycer.allay.command;
 
 import cn.hycer.allay.Allay;
-import cn.hycer.allay.AllayConfig;
+import cn.hycer.allay.config.AllayConfig;
 import cn.hycer.allay.asb.config.ScoreboardItem;
 import cn.hycer.allay.tk.TrialStorage;
 import com.mojang.brigadier.context.CommandContext;
