@@ -1,0 +1,104 @@
+buildscript {
+    repositories {
+        maven { url = 'https://maven.fabricmc.net/' }
+        maven { url = 'https://maven.aliyun.com/repository/central' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "net.fabricmc:fabric-loom:${loom_version}"
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    version = rootProject.mod_version
+    group = rootProject.maven_group
+
+    def mcVersion = project.name.replace('mc-', '')
+
+    base {
+        archivesName = "${rootProject.archives_base_name}-mc${mcVersion}"
+    }
+
+    repositories {
+        maven { url = 'https://maven.fabricmc.net/' }
+        maven { url = 'https://maven.aliyun.com/repository/central' }
+        mavenCentral()
+    }
+
+    sourceSets {
+        main {
+            java {
+                srcDir(rootProject.file('common/src/main/java'))
+                srcDir('src/main/java')
+            }
+            resources {
+                srcDir(rootProject.file('common/src/main/resources'))
+                srcDir('src/main/resources')
+            }
+        }
+    }
+
+    processResources {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        inputs.property("version", project.version)
+        filesMatching("fabric.mod.json") {
+            expand("version": project.version)
+        }
+    }
+
+    java {
+        withSourcesJar()
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = "UTF-8"
+    }
+
+    jar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        from(rootProject.file('LICENSE.txt')) {
+            rename { "${it}_${project.archives_base_name}" }
+        }
+    }
+
+    tasks.named('sourcesJar', Jar) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+
+    tasks.named('jar', Jar) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+}
+
+tasks.register('buildAll') {
+    group = 'build'
+    description = '构建所有子模块并将 JAR 收集到根目录'
+    subprojects.each { dependsOn "${it.name}:build" }
+    finalizedBy 'collectJars'
+}
+
+tasks.register('collectJars') {
+    group = 'build'
+    description = '将所有模块的 JAR 收集到 dist/ 目录'
+    doLast {
+        def distDir = rootProject.layout.projectDirectory.dir('dist').asFile
+        distDir.mkdirs()
+        subprojects.each { sub ->
+            fileTree("${sub.buildDir}/libs").matching {
+                include '*.jar'
+                exclude '*-sources.jar', '*-dev.jar'
+            }.each { jar ->
+                def mcVer = sub.name.replace('mc-', '')
+                def destName = "${rootProject.archives_base_name}-mc${mcVer}-${rootProject.mod_version}.jar"
+                copy {
+                    from jar
+                    into distDir
+                    rename { destName }
+                }
+            }
+        }
+        println "所有 JAR 已收集到 dist/ 目录"
+    }
+}

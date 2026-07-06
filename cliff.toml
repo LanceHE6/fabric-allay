@@ -1,0 +1,35 @@
+[changelog]
+header = ""
+body = """
+{% if version %}\
+    ## {{ version | trim_start_matches(pat="V") }}\
+    {% if date %} ({{ date }}){% endif %}
+{% endif %}\
+{% for group, commits in commits | group_by(attribute="group") %}
+    ### {{ group | striptags | trim | upper_first }}
+    {% for commit in commits %}
+        - {% if commit.scope %}**{{ commit.scope }}**: {% endif %}\
+          {{ commit.message | upper_first | trim }}\
+          {% if commit.links %} ({{ commit.links | join(sep=", ") }}){% endif %}\
+    {% endfor %}
+{% endfor %}\
+"""
+footer = ""
+trim = true
+
+[git]
+conventional_commits = true
+filter_unconventional = false
+split_commits = false
+commit_parsers = [
+    { message = "^feat", group = "新功能 (Features)" },
+    { message = "^fix", group = "问题修复 (Bug Fixes)" },
+    { message = "^refactor", group = "代码重构 (Refactoring)" },
+    { message = "^chore", group = "杂项 (Misc)" },
+    { message = "^doc", group = "文档 (Documentation)" },
+    { message = "^test", group = "测试 (Tests)" },
+    { message = "^perf", group = "性能优化 (Performance)" },
+    { message = "^style", group = "代码风格 (Styling)" },
+    { message = "^ci", group = "CI/CD" },
+    { message = "^build", group = "构建 (Build)" },
+]

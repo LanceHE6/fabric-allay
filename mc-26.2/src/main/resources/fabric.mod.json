@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "allay",
+  "version": "${version}",
+  "name": "Allay",
+  "description": "A Minecraft Fabric server-side utility mod combining AdvancedScoreboard, CarpetBotManager, and TrialKeeper",
+  "authors": ["LanceHE6"],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/allay/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "cn.hycer.allay.client.AllayDataGenerator"
+    ],
+    "client": [
+      "cn.hycer.allay.client.AllayClient"
+    ],
+    "main": [
+      "cn.hycer.allay.Allay"
+    ]
+  },
+  "mixins": [
+    "allay.mixins.json",
+    {
+      "config": "allay.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "fabric-api": "*",
+    "minecraft": "26.2"
+  }
+}

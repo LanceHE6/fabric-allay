@@ -1,0 +1,19 @@
+pluginManagement {
+    repositories {
+        maven { url = 'https://maven.fabricmc.net/' }
+        maven { url = 'https://maven.aliyun.com/repository/central' }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id('org.gradle.toolchains.foojay-resolver-convention') version('1.0.0')
+}
+
+rootProject.name = 'allay'
+
+include 'mc-26.2'
+include 'mc-26.1.2'
+include 'mc-26.1.1'
+include 'mc-26.1'
