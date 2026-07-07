@@ -2,6 +2,7 @@ package cn.hycer.allay.asb;
 
 import cn.hycer.allay.Allay;
 import cn.hycer.allay.feature.DamageIndicator;
+import cn.hycer.allay.feature.DamageIndicatorHook;
 import cn.hycer.allay.feature.PlayerPrefs;
 import cn.hycer.allay.asb.event.*;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
@@ -27,6 +28,8 @@ public class AdvancedScoreboardModule {
             ServerStartedEvent.onServerStarted(server);
             DamageIndicator.init(server);
         });
+
+        DamageIndicatorHook.register();
 
         PlayerBlockBreakEvents.AFTER.register(((world, playerEntity, blockPos, blockState, blockEntity) ->
                 PlayerBreakBlockEvent.onBreak(playerEntity)));

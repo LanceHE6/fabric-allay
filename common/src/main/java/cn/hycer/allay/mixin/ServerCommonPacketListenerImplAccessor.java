@@ -4,9 +4,9 @@ import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(ServerCommonPacketListenerImpl.class)
+@Mixin(value = ServerCommonPacketListenerImpl.class, remap = false)
 public interface ServerCommonPacketListenerImplAccessor {
 
-    @Accessor("latency")
+    @Accessor(value = "latency", remap = false)
     int getLatency();
 }

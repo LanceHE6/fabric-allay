@@ -73,7 +73,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           name: ${{ env.MOD_VERSION }}
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ env.MOD_VERSION }}
           body_path: CHANGELOG_BODY.md
           files: ./outputs/*.jar
           draft: false
