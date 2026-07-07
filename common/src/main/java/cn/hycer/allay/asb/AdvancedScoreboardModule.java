@@ -1,6 +1,8 @@
 package cn.hycer.allay.asb;
 
 import cn.hycer.allay.Allay;
+import cn.hycer.allay.feature.DamageIndicator;
+import cn.hycer.allay.feature.PlayerPrefs;
 import cn.hycer.allay.asb.event.*;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -19,9 +21,12 @@ public class AdvancedScoreboardModule {
     public static void init() {
         Allay.LOGGER.info("[Allay/ASB] Initializing AdvancedScoreboard module...");
 
-        PlayerScoreboardPrefs.load();
+        PlayerPrefs.load();
 
-        ServerLifecycleEvents.SERVER_STARTED.register(ServerStartedEvent::onServerStarted);
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+            ServerStartedEvent.onServerStarted(server);
+            DamageIndicator.init(server);
+        });
 
         PlayerBlockBreakEvents.AFTER.register(((world, playerEntity, blockPos, blockState, blockEntity) ->
                 PlayerBreakBlockEvent.onBreak(playerEntity)));
@@ -40,10 +45,10 @@ public class AdvancedScoreboardModule {
     }
 
     public static boolean isPlayerHidden(UUID uuid, String internalName) {
-        return PlayerScoreboardPrefs.isHidden(uuid, internalName);
+        return PlayerPrefs.isScoreboardHidden(uuid, internalName);
     }
 
     public static boolean togglePlayerHidden(UUID uuid, String internalName) {
-        return PlayerScoreboardPrefs.toggle(uuid, internalName);
+        return PlayerPrefs.toggleScoreboardHidden(uuid, internalName);
     }
 }

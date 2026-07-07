@@ -68,6 +68,18 @@ public class AllayCommand {
                             .executes(ctx -> featureToggle(ctx, "superTNT",
                                     "超级TNT", BoolArgumentType.getBool(ctx, "value"))));
 
+            // Per-player toggle: /allay damageIndicator true|false
+            var damageIndicator = literal("damageIndicator")
+                    .then(argument("value", BoolArgumentType.bool())
+                            .executes(ctx -> {
+                                var player = ctx.getSource().getPlayerOrException();
+                                boolean v = BoolArgumentType.getBool(ctx, "value");
+                                cn.hycer.allay.feature.PlayerPrefs.setDamageIndicator(player.getUUID(), v);
+                                ctx.getSource().sendSuccess(
+                                    () -> Component.literal("伤害跳字已" + (v ? "开启" : "关闭")), false);
+                                return 1;
+                            }));
+
             // Permanent: /allay setDefault <rule> true|false
             var setDefault = literal("setDefault")
                     .then(argument("rule", StringArgumentType.word())
@@ -90,6 +102,7 @@ public class AllayCommand {
                     .then(literal("features").executes(AllayChatInterface::showFeatureList))
                     .then(fragileObsidian)
                     .then(superTNT)
+                    .then(damageIndicator)
                     .then(setDefault)
                     .then(removeDefault)
                     .then(asb)

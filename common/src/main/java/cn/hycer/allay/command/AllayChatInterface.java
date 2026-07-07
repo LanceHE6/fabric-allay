@@ -117,29 +117,42 @@ public final class AllayChatInterface {
     private static final String[][] ALL_FEATURES = {
             {"fragileObsidian", "易碎黑曜石", "黑曜石挖掘速度等同石头"},
             {"superTNT", "超级TNT", "TNT可破坏黑曜石和刷怪笼"},
+            {"damageIndicator", "伤害跳字", "攻击时在目标上方显示伤害数值（每玩家独立）"},
     };
 
     public static int showFeatureList(CommandContext<CommandSourceStack> ctx) {
         var src = ctx.getSource();
         var mgr = FeatureManager.getInstance();
         var cfg = AllayConfig.getInstance();
+        UUID uuid;
+        try { uuid = src.getPlayerOrException().getUUID(); } catch (Exception e) { uuid = null; }
 
         src.sendSystemMessage(Component.literal(""));
         src.sendSystemMessage(title("功能开关"));
 
         for (String[] f : ALL_FEATURES) {
             String name = f[0], display = f[1], desc = f[2];
-            boolean current = "fragileObsidian".equals(name) ? mgr.isFragileObsidian() : mgr.isSuperTNT();
+
+            boolean current;
             boolean perm = cfg.hasFeatureDefault(name);
+            boolean isPerPlayer = "damageIndicator".equals(name);
+
+            if (isPerPlayer) {
+                current = uuid != null && cn.hycer.allay.feature.PlayerPrefs.isDamageIndicatorOn(uuid);
+            } else {
+                current = "fragileObsidian".equals(name) ? mgr.isFragileObsidian() : mgr.isSuperTNT();
+            }
+
             String status = current ? "§a开" : "§c关";
-            if (!perm) status += " §7(临时)";
+            if (!isPerPlayer && !perm) status += " §7(临时)";
+            if (isPerPlayer) status += " §7(个人)";
 
             MutableComponent line = Component.literal("");
             line.append(Component.literal("  " + display + " " + status));
             line.append(Component.literal("  ").withStyle(s -> s.withColor(TextColor.fromRgb(0x888888)))
                     .append(suggestBtn(current ? "[关闭]" : "[开启]",
                             ALLAY + name + " " + !current)));
-            if (perm) {
+            if (!isPerPlayer && perm) {
                 line.append(btn(" [移除永久]", ALLAY + "removeDefault " + name));
             }
 
@@ -147,9 +160,9 @@ public final class AllayChatInterface {
         }
 
         src.sendSystemMessage(Component.literal(""));
-        src.sendSystemMessage(Component.literal("  使用 /allay <规则> true|false 临时切换")
+        src.sendSystemMessage(Component.literal("  使用 /allay <规则> true|false 切换")
                 .withStyle(s -> s.withColor(TextColor.fromRgb(0x888888))));
-        src.sendSystemMessage(Component.literal("  使用 /allay setDefault|removeDefault 永久设置")
+        src.sendSystemMessage(Component.literal("  全局规则使用 setDefault|removeDefault 永久设置")
                 .withStyle(s -> s.withColor(TextColor.fromRgb(0x888888))));
         src.sendSystemMessage(Component.literal("").append(back(ALLAY)));
         return 1;
