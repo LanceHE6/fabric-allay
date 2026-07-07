@@ -1,4 +1,4 @@
-package cn.hycer.allay.asb.mixin;
+package cn.hycer.allay.mixin;
 
 import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 import org.spongepowered.asm.mixin.Mixin;

@@ -3,6 +3,9 @@ package cn.hycer.allay.config;
 import cn.hycer.allay.asb.config.ScoreboardItem;
 import cn.hycer.allay.cbm.model.BotGroup;
 import cn.hycer.allay.cbm.model.BotPreset;
+import cn.hycer.allay.config.AsbSection;
+import cn.hycer.allay.config.CbmSection;
+import cn.hycer.allay.config.TkSection;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,6 +60,9 @@ public class AllayConfig {
 
     @JsonProperty("trialKeeper")
     private TkSection trialKeeper = new TkSection();
+
+    @JsonProperty("featureDefaults")
+    private Map<String, Boolean> featureDefaults = new LinkedHashMap<>();
 
     // ═══════════════════════════════════════════════════════════
     //  Delegating accessors
@@ -117,6 +123,26 @@ public class AllayConfig {
 
     @JsonIgnore
     public TkSection getTk() { return trialKeeper; }
+
+    // ── Feature defaults ──────────────────────────────────────
+
+    public boolean hasFeatureDefault(String name) {
+        return featureDefaults.containsKey(name);
+    }
+
+    public boolean getFeatureDefault(String name) {
+        return featureDefaults.getOrDefault(name, false);
+    }
+
+    public void setFeatureDefault(String name, boolean value) {
+        featureDefaults.put(name, value);
+        saveConfig();
+    }
+
+    public void removeFeatureDefault(String name) {
+        featureDefaults.remove(name);
+        saveConfig();
+    }
 
     // ═══════════════════════════════════════════════════════════
     //  Singleton & persistence

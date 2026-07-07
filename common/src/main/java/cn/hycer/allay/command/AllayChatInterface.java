@@ -2,6 +2,7 @@ package cn.hycer.allay.command;
 
 import cn.hycer.allay.Allay;
 import cn.hycer.allay.config.AllayConfig;
+import cn.hycer.allay.feature.FeatureManager;
 import cn.hycer.allay.asb.config.ScoreboardItem;
 import cn.hycer.allay.tk.TrialStorage;
 import com.mojang.brigadier.context.CommandContext;
@@ -93,6 +94,13 @@ public final class AllayChatInterface {
 
         src.sendSystemMessage(subtitle("试炼"));
         src.sendSystemMessage(Component.literal("  数据文件: " + cfg.getTkDataFile()));
+
+        var mgr = FeatureManager.getInstance();
+        src.sendSystemMessage(subtitle("功能开关"));
+        src.sendSystemMessage(Component.literal("  易碎黑曜石: " + (mgr.isFragileObsidian() ? "开" : "关") + "  ")
+                .append(suggestBtn("[改]", ALLAY + "fragileObsidian ")));
+        src.sendSystemMessage(Component.literal("  超级TNT: " + (mgr.isSuperTNT() ? "开" : "关") + "  ")
+                .append(suggestBtn("[改]", ALLAY + "superTNT ")));
 
         src.sendSystemMessage(Component.literal("").append(back(ALLAY)));
         return 1;
