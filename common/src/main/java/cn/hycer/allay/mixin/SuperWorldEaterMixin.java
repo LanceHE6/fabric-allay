@@ -8,10 +8,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = Block.class, remap = false)
+@Mixin(Block.class)
 public class SuperWorldEaterMixin {
 
-    @Inject(method = "getExplosionResistance", at = @At("HEAD"), cancellable = true, remap = false)
+    @Inject(method = "getExplosionResistance", at = @At("HEAD"), cancellable = true)
     private void overrideExplosionResistance(CallbackInfoReturnable<Float> cir) {
         if (!FeatureManager.getInstance().isSuperTNT()) return;
 

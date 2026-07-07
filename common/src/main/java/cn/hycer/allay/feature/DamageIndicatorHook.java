@@ -2,14 +2,7 @@ package cn.hycer.allay.feature;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 
-/**
- * Registers damage indicator via Fabric API events.
- * No Mixin needed — uses ServerLivingEntityEvents.AFTER_DAMAGE.
- */
 public class DamageIndicatorHook {
 
     public static void register() {
@@ -20,7 +13,7 @@ public class DamageIndicatorHook {
             if (dealt <= 0) return;
 
             boolean crit = isCrit(player);
-            DamageIndicator.onPlayerDamage(entity, player, dealt, crit);
+            DamageIndicator.onDamage(entity, attacker, dealt, crit);
         });
     }
 
