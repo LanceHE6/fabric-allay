@@ -36,6 +36,7 @@ public final class AllayChatInterface {
                 .append(btn(" [试炼] ", TK + "ui")));
         src.sendSystemMessage(Component.literal("")
                 .append(btn(" [设置] ", ALLAY + "config"))
+                .append(btn(" [特性] ", ALLAY + "features"))
                 .append(btn(" [帮助] ", ALLAY + "help")));
         return 1;
     }
@@ -102,6 +103,51 @@ public final class AllayChatInterface {
         src.sendSystemMessage(Component.literal("  超级TNT: " + (mgr.isSuperTNT() ? "开" : "关") + "  ")
                 .append(suggestBtn("[改]", ALLAY + "superTNT ")));
 
+        src.sendSystemMessage(Component.literal("").append(back(ALLAY)));
+        return 1;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    //  Feature list  (/allay features)
+    // ═══════════════════════════════════════════════════════════
+
+    private static final String[][] ALL_FEATURES = {
+            {"fragileObsidian", "易碎黑曜石", "黑曜石挖掘速度等同石头"},
+            {"superTNT", "超级TNT", "TNT可破坏黑曜石和刷怪笼"},
+    };
+
+    public static int showFeatureList(CommandContext<CommandSourceStack> ctx) {
+        var src = ctx.getSource();
+        var mgr = FeatureManager.getInstance();
+        var cfg = AllayConfig.getInstance();
+
+        src.sendSystemMessage(Component.literal(""));
+        src.sendSystemMessage(title("功能开关"));
+
+        for (String[] f : ALL_FEATURES) {
+            String name = f[0], display = f[1], desc = f[2];
+            boolean current = "fragileObsidian".equals(name) ? mgr.isFragileObsidian() : mgr.isSuperTNT();
+            boolean perm = cfg.hasFeatureDefault(name);
+            String status = current ? "§a开" : "§c关";
+            if (!perm) status += " §7(临时)";
+
+            MutableComponent line = Component.literal("");
+            line.append(Component.literal("  " + display + " " + status));
+            line.append(Component.literal("  ").withStyle(s -> s.withColor(TextColor.fromRgb(0x888888)))
+                    .append(suggestBtn(current ? "[关闭]" : "[开启]",
+                            ALLAY + name + " " + !current)));
+            if (perm) {
+                line.append(btn(" [移除永久]", ALLAY + "removeDefault " + name));
+            }
+
+            src.sendSystemMessage(line);
+        }
+
+        src.sendSystemMessage(Component.literal(""));
+        src.sendSystemMessage(Component.literal("  使用 /allay <规则> true|false 临时切换")
+                .withStyle(s -> s.withColor(TextColor.fromRgb(0x888888))));
+        src.sendSystemMessage(Component.literal("  使用 /allay setDefault|removeDefault 永久设置")
+                .withStyle(s -> s.withColor(TextColor.fromRgb(0x888888))));
         src.sendSystemMessage(Component.literal("").append(back(ALLAY)));
         return 1;
     }

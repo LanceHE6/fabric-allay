@@ -87,6 +87,7 @@ public class AllayCommand {
                     .executes(AllayChatInterface::showMainMenu)
                     .then(literal("help").executes(AllayChatInterface::showHelp))
                     .then(literal("config").executes(AllayChatInterface::showConfig))
+                    .then(literal("features").executes(AllayChatInterface::showFeatureList))
                     .then(fragileObsidian)
                     .then(superTNT)
                     .then(setDefault)
