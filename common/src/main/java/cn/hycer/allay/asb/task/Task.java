@@ -135,10 +135,7 @@ public class Task {
     }
 
     private static void syncLatency(MinecraftServer server) {
-        var config = AllayConfig.getInstance();
         var scoreboard = AdvancedScoreboardModule.scoreboard;
-        var item = config.getScoreboardByInternalName(AllayConfig.LATENCY_INTERNAL_NAME);
-        if (item == null) return;
         Objective objective = scoreboard.getObjective(AllayConfig.LATENCY_INTERNAL_NAME);
         if (objective == null) return;
 
@@ -147,14 +144,14 @@ public class Task {
         }
 
         for (var entry : scoreboard.listPlayerScores(objective)) {
-            if (!item.getData().containsKey(entry.owner())) {
-                scoreboard.resetSinglePlayerScore(ScoreHolder.forNameOnly(entry.owner()), objective);
+            String owner = entry.owner();
+            if (server.getPlayerList().getPlayerByName(owner) == null) {
+                scoreboard.resetSinglePlayerScore(ScoreHolder.forNameOnly(owner), objective);
             }
         }
 
         for (var player : server.getPlayerList().getPlayers()) {
             int pingMs = ((ServerCommonPacketListenerImplAccessor) player.connection).getLatency();
-            item.updateData(player.getScoreboardName(), pingMs);
             ScoreHolder scoreHolder = ScoreHolder.forNameOnly(player.getScoreboardName());
             ScoreAccess scoreAccess = scoreboard.getOrCreatePlayerScore(scoreHolder, objective);
             scoreAccess.set(pingMs);
