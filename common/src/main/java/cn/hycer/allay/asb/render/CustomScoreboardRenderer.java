@@ -65,8 +65,14 @@ public class CustomScoreboardRenderer {
             for (int i = 0; i < sorted.size(); i++) {
                 var entry = sorted.get(i);
                 int rank = i + 1;
+                String nameColor = switch (rank) {
+                    case 1 -> "§6"; // gold
+                    case 2 -> "§7"; // silver
+                    case 3 -> "§c"; // bronze (reddish)
+                    default -> "§f"; // white
+                };
                 String holderName = "§" + String.format("%02x", rank) + entry.getKey();
-                Component display = Component.literal("§e#" + rank + " §f" + entry.getKey() + " §7- §a" + entry.getValue());
+                Component display = Component.literal("§e#" + rank + " " + nameColor + entry.getKey());
                 newHolders.add(holderName);
                 player.connection.send(new ClientboundSetScorePacket(
                     holderName, obj.getName(), entry.getValue(),
