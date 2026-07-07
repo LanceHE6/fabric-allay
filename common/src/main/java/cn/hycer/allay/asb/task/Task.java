@@ -52,11 +52,20 @@ public class Task {
 
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 UUID uuid = player.getUUID();
+                // Per-player visible: global visible minus per-player hidden
+                List<ScoreboardItem> playerVisible = visible.stream()
+                        .filter(sb -> !AdvancedScoreboardModule.isPlayerHidden(uuid, sb.getInternalName()))
+                        .toList();
+                if (playerVisible.isEmpty()) {
+                    CustomScoreboardRenderer.clearDisplay(player);
+                    continue;
+                }
+
                 int index = playerRotationIndex.getOrDefault(uuid, -1);
-                index = (index + 1) % visible.size();
+                index = (index + 1) % playerVisible.size();
                 playerRotationIndex.put(uuid, index);
 
-                ScoreboardItem currentItem = visible.get(index);
+                ScoreboardItem currentItem = playerVisible.get(index);
                 playerCurrentItem.put(uuid, currentItem);
                 CustomScoreboardRenderer.sendDisplay(player, currentItem);
             }

@@ -1,6 +1,7 @@
 package cn.hycer.allay.asb.command;
 
 import cn.hycer.allay.config.AllayConfig;
+import cn.hycer.allay.asb.config.ScoreboardItem;
 import cn.hycer.allay.asb.event.ServerStartedEvent;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -77,6 +78,26 @@ public class SetCommand {
                         AllayConfig.getInstance().saveConfig();
                         context.getSource().sendSuccess(
                             () -> Component.literal("跳过前缀已设置为 " + value), false);
+                        return 1;
+                    })))
+            // Global hide (OP-only, moved under set)
+            .then(literal("notDisplay")
+                .then(argument("displayName", StringArgumentType.greedyString())
+                    .suggests(ScoreboardCommand.DISPLAY_NAME_SUGGESTIONS)
+                    .executes(context -> {
+                        String displayName = StringArgumentType.getString(context, "displayName");
+                        ScoreboardItem item = AllayConfig.getInstance().getScoreboards().stream()
+                            .filter(sb -> displayName.equals(sb.getDisplayName()))
+                            .findFirst().orElse(null);
+                        if (item == null) {
+                            context.getSource().sendFailure(Component.literal("未找到榜单: " + displayName));
+                            return 0;
+                        }
+                        boolean hidden = AllayConfig.getInstance().toggleScoreboardVisibility(item.getInternalName());
+                        AllayConfig.getInstance().saveConfig();
+                        String msg = hidden ? "已全局隐藏榜单: " + item.getDisplayName()
+                                           : "已全局显示榜单: " + item.getDisplayName();
+                        context.getSource().sendSuccess(() -> Component.literal(msg), false);
                         return 1;
                     })));
     }

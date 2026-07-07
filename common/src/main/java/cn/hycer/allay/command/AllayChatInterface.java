@@ -3,11 +3,14 @@ package cn.hycer.allay.command;
 import cn.hycer.allay.Allay;
 import cn.hycer.allay.config.AllayConfig;
 import cn.hycer.allay.feature.FeatureManager;
+import cn.hycer.allay.asb.AdvancedScoreboardModule;
 import cn.hycer.allay.asb.config.ScoreboardItem;
 import cn.hycer.allay.tk.TrialStorage;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.*;
+
+import java.util.UUID;
 
 /**
  * Unified chat-based UI for /allay, accessible entirely server-side.
@@ -159,22 +162,35 @@ public final class AllayChatInterface {
     public static int showAsbMenu(CommandContext<CommandSourceStack> ctx) {
         var src = ctx.getSource();
         var cfg = AllayConfig.getInstance();
+        UUID uuid;
+        try { uuid = src.getPlayerOrException().getUUID(); } catch (Exception e) { uuid = null; }
+
         src.sendSystemMessage(Component.literal(""));
         src.sendSystemMessage(title("计分板管理"));
 
         var boards = cfg.getScoreboards();
-        var hidden = cfg.getHiddenScoreboards();
+        var globalHidden = cfg.getHiddenScoreboards();
         if (boards.isEmpty()) {
             src.sendSystemMessage(Component.literal("  暂无计分板"));
         } else {
+            src.sendSystemMessage(Component.literal("  全局隐藏 = OP设置，个人隐藏 = 自己可调"));
             for (var sb : boards) {
-                boolean isHidden = hidden.contains(sb.getInternalName());
-                String marker = isHidden ? " [已隐藏]" : "";
+                boolean gHidden = globalHidden.contains(sb.getInternalName());
+                boolean pHidden = uuid != null && AdvancedScoreboardModule.isPlayerHidden(uuid, sb.getInternalName());
                 int count = sb.getData().size();
-                src.sendSystemMessage(Component.literal("  " + sb.getDisplayName() + marker + " (" + count + "人)")
-                        .append(btn(isHidden ? " [显示]" : " [隐藏]",
-                                ASB + "notDisplay " + sb.getDisplayName()))
-                        .append(btn(" [查看]", ASB + "scoreboard " + sb.getDisplayName())));
+
+                MutableComponent line = Component.literal("");
+                if (gHidden) line.append(Component.literal("  [全局隐藏] ").withStyle(s -> s.withColor(TextColor.fromRgb(0x888888))));
+                else if (pHidden) line.append(Component.literal("  [个人隐藏] ").withStyle(s -> s.withColor(TextColor.fromRgb(0xAAAAAA))));
+
+                line.append(Component.literal(sb.getDisplayName()));
+                line.append(Component.literal(" (" + count + "人)"));
+                if (!gHidden) {
+                    line.append(btn(pHidden ? " [显示]" : " [隐藏]", ASB + "hide " + sb.getDisplayName()));
+                }
+                line.append(btn(" [查看]", ASB + "scoreboard " + sb.getDisplayName()));
+
+                src.sendSystemMessage(line);
             }
         }
 
@@ -183,7 +199,8 @@ public final class AllayChatInterface {
                 .append(suggestBtn("[轮播间隔]", ASB + "set switchInterval "))
                 .append(suggestBtn("[保存间隔]", ASB + "set saveInterval "))
                 .append(suggestBtn("[最大显示]", ASB + "set maxDisplayNum "))
-                .append(suggestBtn("[边框]", ASB + "set border ")));
+                .append(suggestBtn("[边框]", ASB + "set border "))
+                .append(suggestBtn("[全局隐藏]", ASB + "set notDisplay ")));
 
         src.sendSystemMessage(Component.literal("").append(back(ALLAY)));
         return 1;

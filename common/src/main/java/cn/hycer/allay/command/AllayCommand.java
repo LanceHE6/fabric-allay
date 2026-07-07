@@ -1,6 +1,6 @@
 package cn.hycer.allay.command;
 
-import cn.hycer.allay.asb.command.NotDisplayCommand;
+import cn.hycer.allay.asb.command.HideCommand;
 import cn.hycer.allay.asb.command.ScoreboardCommand;
 import cn.hycer.allay.asb.command.SetCommand;
 import cn.hycer.allay.cbm.command.handler.*;
@@ -28,7 +28,7 @@ public class AllayCommand {
             asb.then(literal("ui").executes(AllayChatInterface::showAsbMenu));
             asb.then(SetCommand.build());
             asb.then(ScoreboardCommand.build());
-            asb.then(NotDisplayCommand.build());
+            asb.then(HideCommand.build());
 
             var cbot = literal("cbot").executes(ChatInterface::showMainMenu);
             BotCommandTree.addNodes(cbot);

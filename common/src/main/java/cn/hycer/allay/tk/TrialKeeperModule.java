@@ -10,7 +10,7 @@ public class TrialKeeperModule {
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             String dataFile = AllayConfig.getInstance().getTkDataFile();
-            TrialStorage.setSaveFile(server.getServerDirectory().resolve(dataFile));
+            TrialStorage.setSaveFile(server.getServerDirectory().resolve("config/allay").resolve(dataFile));
             TrialStorage.loadFromFile();
         });
     }

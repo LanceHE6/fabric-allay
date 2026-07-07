@@ -14,52 +14,36 @@
 
 ### AdvancedScoreboard (`/allay asb`)
 
-多维度计分板统计，支持每玩家独立轮播、自动同步、实时刷新。
+多维度计分板统计，每玩家独立轮播、自动同步、实时刷新。
 
-| 统计项 | 说明 |
-|--------|------|
-| 挖掘量 | 玩家破坏方块数量 |
-| 放置量 | 玩家放置方块数量 |
-| 在线时长 | 玩家在线小时数 |
-| 飞行距离 | 鞘翅飞行公里数 |
-| 受到伤害 | 累计伤害值 |
-| 死亡次数 | 死亡次数统计 |
-| 击杀生物 | 击杀生物数（不含玩家） |
-| 延迟显示 | TAB 列表按颜色显示延迟 |
+**统计项**：挖掘量、放置量、在线时长、飞行距离、受到伤害、死亡次数、击杀生物、延迟显示
 
-前三名玩家名显示金/银/铜色。支持积分跳过（按玩家名前缀过滤假人）。
+**特性**：
+- 前三名金/银/铜色玩家名
+- 双层榜单隐藏：全局隐藏（OP） + 个人隐藏（全员，持久化）
+- 积分跳过（按玩家名前缀过滤假人）
+- 每玩家独立自定义显示榜单
 
 ### CarpetBotManager (`/allay cbot`)
 
-Carpet 假人管理，支持保存预设、分组管理、批量操作、自动部署。
-
-- 假人预设创建/删除/召唤
-- 假人分组管理（批量加载）
-- 批量操作：批量召唤/保存/下线/使用/攻击/潜行
-- 自动加载：服务端启动时自动召唤指定假人/分组
-- 聊天交互菜单（UI）：点击按钮即可操作
+Carpet 假人管理，保存/召唤/分组/批量操作，聊天交互菜单驱动。
 
 ### TrialKeeper (`/allay tk`)
 
-试炼区块方块保存与恢复，适用于试炼大厅维护。
-
-- 移除并保存指定区域的 vault / trial spawner / ominous vault
-- 按名称恢复已保存的区块
-- 列表查询、详情查看、清空管理
-- 敏感操作（恢复/删除/清空）需两步确认
+试炼区块（vault / trial spawner / ominous vault）保存与恢复，敏感操作需两步确认。
 
 ### 特性开关 (`/allay features`)
 
-Carpet 式规则开关，临时切换重启后自动恢复为默认值。
+Carpet 式规则开关，临时切换重启后恢复默认。
 
 | 特性 | 说明 |
 |------|------|
 | fragileObsidian | 黑曜石/哭泣黑曜石挖掘速度等同石头 |
 | superTNT | TNT 可破坏黑曜石、哭泣黑曜石和刷怪笼 |
 
-- `/allay <规则> true|false` — 临时切换，反馈消息含"永久更改？"可点击链接
+- `/allay <规则> true|false` — 临时切换（反馈含"永久更改？"可点击链接）
 - `/allay setDefault <规则> true|false` — 永久设置
-- `/allay removeDefault <规则>` — 移除永久设置，恢复 false
+- `/allay removeDefault <规则>` — 移除永久设置
 - `/allay features` — 查看所有特性状态
 
 ---
@@ -69,15 +53,18 @@ Carpet 式规则开关，临时切换重启后自动恢复为默认值。
 ```
 /allay
 ├── help / config / features
-├── fragileObsidian <true|false>       # 临时切换易碎黑曜石
-├── superTNT <true|false>              # 临时切换超级TNT
-├── setDefault <规则> <true|false>     # 永久设置
-├── removeDefault <规则>               # 移除永久设置
+├── fragileObsidian <true|false>
+├── superTNT <true|false>
+├── setDefault <规则> <true|false>
+├── removeDefault <规则>
 ├── asb                                # AdvancedScoreboard
-│   ├── ui                             # 交互菜单
+│   ├── ui                             # 交互菜单（个人隐藏/查看）
+│   ├── hide <榜单名>                  # 个人隐藏/显示（无需权限）
 │   ├── set <配置项> <值>              # 修改配置（需 OP）
-│   ├── scoreboard <榜单名>            # 查询榜单
-│   └── notDisplay <榜单名>            # 隐藏/显示榜单
+│   │   ├── switchInterval / saveInterval / maxDisplayNum
+│   │   ├── border / skipScore / skipPrefix
+│   │   └── notDisplay <榜单名>        # 全局隐藏/显示
+│   └── scoreboard <榜单名>            # 查询榜单
 ├── cbot                               # CarpetBotManager
 │   ├── ui / help / list
 │   ├── add|remove|load <名称>
@@ -85,20 +72,29 @@ Carpet 式规则开关，临时切换重启后自动恢复为默认值。
 │   ├── batch <前缀> <起> <止> spawn|save|kill|use|attack|sneak
 │   └── autoload add|remove|list
 └── tk                                 # TrialKeeper
-    ├── ui                             # 交互菜单
+    ├── ui                             # 交互菜单（确认流程）
     ├── remove <名称> <起> <止>
     ├── restore <名称>
     ├── list [名称]
     └── clear [名称]
 ```
 
-快捷别名：`/asb` `/cbot` `/trialkeeper` 可替代 `/allay asb` 等。
+快捷别名：`/asb` `/cbot` `/trialkeeper` 等价于 `/allay asb` 等。
 
 ---
 
 ## 配置文件
 
-服务端首次启动后自动生成 `config/allay.json`：
+所有数据存储在 `config/allay/` 目录：
+
+```
+config/allay/
+├── allay.json                    # 全局配置、假人预设、特性默认值
+├── scoreboard_prefs.json         # 每玩家计分板隐藏偏好
+└── allay_trialkeeper_data.nbt    # 试炼区块保存数据
+```
+
+`allay.json` 结构：
 
 ```json
 {
@@ -122,25 +118,28 @@ Carpet 式规则开关，临时切换重启后自动恢复为默认值。
     "groups": {}
   },
   "trialKeeper": {
-    "dataFile": "config/allay_trialkeeper_data.nbt"
+    "dataFile": "allay_trialkeeper_data.nbt"
   },
   "featureDefaults": {}
 }
 ```
 
-所有模块配置集中在同一文件，新增字段自动补全默认值。
+`scoreboard_prefs.json` 格式：`{"<uuid>": ["internalName1", ...]}`
+
+新增字段自动补全默认值，无需手动迁移。
 
 ---
 
 ## 迁移
 
-从独立 mod（AdvancedScoreboard / CarpetBotManager / TrialKeeper）切换到 Allay 时，首次启动会自动：
+从独立 mod 切换到 Allay 时，首次启动自动迁移：
 
-1. 读取 `advanced_scoreboard.json` → 导入 `advancedScoreboard` 段
-2. 读取 `carpetbotmanager.json` → 导入 `carpetBotManager` 段
-3. 读取 `carpetbotmanager_bots.json` / `carpetbotmanager_groups.json` → 导入 `carpetBotManager.bots` / `groups`
-4. 重命名 `trialkeeper_data.nbt` → `allay_trialkeeper_data.nbt`
-5. 写入 `allay.json`，旧文件加 `.bak` 后缀保留
+1. `advanced_scoreboard.json` → `allay.json` advancedScoreboard 段
+2. `carpetbotmanager.json` → `allay.json` carpetBotManager 段
+3. `carpetbotmanager_bots.json` / `carpetbotmanager_groups.json` → `allay.json` bots / groups
+4. `trialkeeper_data.nbt` → `allay/allay_trialkeeper_data.nbt`
+5. 旧版 `allay.json` → `allay/allay.json`
+6. 旧文件加 `.bak` 后缀保留
 
 ---
 
@@ -155,17 +154,12 @@ Carpet 式规则开关，临时切换重启后自动恢复为默认值。
 ## 构建
 
 ```bash
-# 构建全部版本
-./gradlew buildAll
-
-# 构建单个版本
-./gradlew :mc-26.2:build
-
-# 收集产物到 dist/
-./gradlew collectJars
+./gradlew buildAll          # 构建全部版本
+./gradlew :mc-26.2:build    # 构建单个版本
+./gradlew collectJars       # 收集产物到 dist/
 ```
 
-产物位于 `dist/` 目录，文件名为 `allay-mc<版本>-<模组版本>.jar`。
+产物：`dist/allay-mc<版本>-<模组版本>.jar`
 
 ---
 
@@ -178,17 +172,14 @@ allay/
 │   ├── command/                           # 根指令 + 聊天UI
 │   ├── config/                            # AllayConfig + 各段配置类
 │   ├── feature/                           # 特性管理器 (Carpet式)
-│   ├── mixin/                             # Mixin（计分板 + 特性）
-│   ├── asb/                               # AdvancedScoreboard 模块
-│   ├── cbm/                               # CarpetBotManager 模块
-│   └── tk/                                # TrialKeeper 模块
-├── mc-26.2/                               # Minecraft 26.2 子项目
-├── mc-26.1.2/                             # Minecraft 26.1.2 子项目
-├── mc-26.1.1/                             # Minecraft 26.1.1 子项目
-├── mc-26.1/                               # Minecraft 26.1 子项目
-├── build.gradle                           # 根构建脚本
-├── settings.gradle                        # 子项目注册
-└── .github/workflows/build-release.yml    # CI/CD 工作流
+│   ├── mixin/                             # Mixin
+│   ├── asb/                               # AdvancedScoreboard
+│   │   └── PlayerScoreboardPrefs.java     # 玩家偏好持久化
+│   ├── cbm/                               # CarpetBotManager
+│   └── tk/                                # TrialKeeper
+├── mc-26.2/ mc-26.1.2/ mc-26.1.1/ mc-26.1/  # 多版本子项目
+├── build.gradle / settings.gradle
+└── .github/workflows/build-release.yml    # CI/CD
 ```
 
 ---

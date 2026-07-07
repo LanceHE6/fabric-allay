@@ -1,11 +1,7 @@
 package cn.hycer.allay.asb;
 
 import cn.hycer.allay.Allay;
-import cn.hycer.allay.config.AllayConfig;
-import cn.hycer.allay.asb.event.PlayerBreakBlockEvent;
-import cn.hycer.allay.asb.event.PlayerKillMobEvent;
-import cn.hycer.allay.asb.event.PlayerPlaceBlockEvent;
-import cn.hycer.allay.asb.event.ServerStartedEvent;
+import cn.hycer.allay.asb.event.*;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
@@ -14,15 +10,16 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.scores.Scoreboard;
 
-/**
- * AdvancedScoreboard module initializer.
- */
+import java.util.UUID;
+
 public class AdvancedScoreboardModule {
 
     public static Scoreboard scoreboard;
 
     public static void init() {
         Allay.LOGGER.info("[Allay/ASB] Initializing AdvancedScoreboard module...");
+
+        PlayerScoreboardPrefs.load();
 
         ServerLifecycleEvents.SERVER_STARTED.register(ServerStartedEvent::onServerStarted);
 
@@ -40,5 +37,13 @@ public class AdvancedScoreboardModule {
             (world, entity, killedEntity, damageSource) ->
                 PlayerKillMobEvent.onKill(world, entity, killedEntity)
         );
+    }
+
+    public static boolean isPlayerHidden(UUID uuid, String internalName) {
+        return PlayerScoreboardPrefs.isHidden(uuid, internalName);
+    }
+
+    public static boolean togglePlayerHidden(UUID uuid, String internalName) {
+        return PlayerScoreboardPrefs.toggle(uuid, internalName);
     }
 }

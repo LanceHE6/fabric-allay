@@ -28,7 +28,7 @@ import java.util.*;
 
 public class AllayConfig {
 
-    public static final String CONFIG_FILE_NAME = "allay.json";
+    public static final String CONFIG_FILE_NAME = "allay/allay.json";
 
     public static final String MINE_COUNT_INTERNAL_NAME = "mine_count";
     public static final String PLACE_COUNT_INTERNAL_NAME = "place_count";
@@ -171,6 +171,16 @@ public class AllayConfig {
         AllayConfig cfg = new AllayConfig();
         cfg.configFile = file;
 
+        // Migrate old config/allay.json → config/allay/allay.json
+        Path oldAllayJson = configDir.resolve("allay.json");
+        if (Files.exists(oldAllayJson)) {
+            try {
+                Files.createDirectories(file.getParentFile().toPath());
+                Files.move(oldAllayJson, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                LOGGER.info("Moved allay.json → allay/allay.json");
+            } catch (IOException ignored) {}
+        }
+
         boolean migrated = migrateFromAdvancedScoreboard(cfg, configDir)
                        | migrateFromCarpetBotManager(cfg, configDir)
                        | migrateCarpetBotData(cfg, configDir)
@@ -208,7 +218,7 @@ public class AllayConfig {
     // ═══════════════════════════════════════════════════════════
 
     private static boolean migrateFromAdvancedScoreboard(AllayConfig cfg, Path configDir) {
-        Path oldFile = configDir.resolve("advanced_scoreboard.json");
+        Path oldFile = configDir.getParent().resolve("advanced_scoreboard.json");
         if (!Files.exists(oldFile)) return false;
 
         try {
@@ -242,7 +252,7 @@ public class AllayConfig {
             }
 
             asb.addMissingDefaults();
-            Files.move(oldFile, configDir.resolve("advanced_scoreboard.json.bak"), StandardCopyOption.REPLACE_EXISTING);
+            Files.move(oldFile, configDir.getParent().resolve("advanced_scoreboard.json.bak"), StandardCopyOption.REPLACE_EXISTING);
             LOGGER.info("Migrated advanced_scoreboard.json → allay.json");
             return true;
         } catch (Exception e) {
@@ -252,7 +262,7 @@ public class AllayConfig {
     }
 
     private static boolean migrateFromCarpetBotManager(AllayConfig cfg, Path configDir) {
-        Path oldFile = configDir.resolve("carpetbotmanager.json");
+        Path oldFile = configDir.getParent().resolve("carpetbotmanager.json");
         if (!Files.exists(oldFile)) return false;
 
         try {
@@ -277,7 +287,7 @@ public class AllayConfig {
                 }
             }
 
-            Files.move(oldFile, configDir.resolve("carpetbotmanager.json.bak"), StandardCopyOption.REPLACE_EXISTING);
+            Files.move(oldFile, configDir.getParent().resolve("carpetbotmanager.json.bak"), StandardCopyOption.REPLACE_EXISTING);
             LOGGER.info("Migrated carpetbotmanager.json → allay.json");
             return true;
         } catch (Exception e) {
@@ -287,8 +297,8 @@ public class AllayConfig {
     }
 
     private static boolean migrateCarpetBotData(AllayConfig cfg, Path configDir) {
-        Path botsFile = configDir.resolve("carpetbotmanager_bots.json");
-        Path groupsFile = configDir.resolve("carpetbotmanager_groups.json");
+        Path botsFile = configDir.getParent().resolve("carpetbotmanager_bots.json");
+        Path groupsFile = configDir.getParent().resolve("carpetbotmanager_groups.json");
         boolean botsExist = Files.exists(botsFile);
         boolean groupsExist = Files.exists(groupsFile);
         if (!botsExist && !groupsExist) return false;
@@ -303,7 +313,7 @@ public class AllayConfig {
                             new TypeToken<LinkedHashMap<String, BotPreset>>(){}.getType());
                     if (bots != null) cbm.setBots(bots);
                 }
-                Files.move(botsFile, configDir.resolve("carpetbotmanager_bots.json.bak"),
+                Files.move(botsFile, configDir.getParent().resolve("carpetbotmanager_bots.json.bak"),
                         StandardCopyOption.REPLACE_EXISTING);
                 LOGGER.info("Migrated carpetbotmanager_bots.json → allay.json");
             }
@@ -313,7 +323,7 @@ public class AllayConfig {
                             new TypeToken<LinkedHashMap<String, BotGroup>>(){}.getType());
                     if (groups != null) cbm.setGroups(groups);
                 }
-                Files.move(groupsFile, configDir.resolve("carpetbotmanager_groups.json.bak"),
+                Files.move(groupsFile, configDir.getParent().resolve("carpetbotmanager_groups.json.bak"),
                         StandardCopyOption.REPLACE_EXISTING);
                 LOGGER.info("Migrated carpetbotmanager_groups.json → allay.json");
             }
@@ -325,15 +335,17 @@ public class AllayConfig {
     }
 
     private static boolean migrateTrialKeeperData(Path configDir) {
-        Path oldFile = configDir.resolve("trialkeeper_data.nbt");
+        Path oldFile = configDir.getParent().resolve("trialkeeper_data.nbt");
         if (!Files.exists(oldFile)) return false;
 
         try {
-            Files.move(oldFile, configDir.resolve("allay_trialkeeper_data.nbt"), StandardCopyOption.REPLACE_EXISTING);
-            LOGGER.info("Renamed trialkeeper_data.nbt → allay_trialkeeper_data.nbt");
+            Path newDir = configDir.getParent().resolve("allay");
+            Files.createDirectories(newDir);
+            Files.move(oldFile, newDir.resolve("allay_trialkeeper_data.nbt"), StandardCopyOption.REPLACE_EXISTING);
+            LOGGER.info("Moved trialkeeper_data.nbt → allay/allay_trialkeeper_data.nbt");
             return true;
         } catch (Exception e) {
-            LOGGER.error("Failed to rename trialkeeper_data.nbt: {}", e.getMessage());
+            LOGGER.error("Failed to move trialkeeper_data.nbt: {}", e.getMessage());
             return false;
         }
     }
