@@ -66,7 +66,7 @@ jobs:
 
       - name: Generate changelog
         run: |
-          git-cliff --tag V${{ env.MOD_VERSION }} -o CHANGELOG_BODY.md
+          git-cliff --latest -o CHANGELOG_BODY.md
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
