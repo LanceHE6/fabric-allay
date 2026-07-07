@@ -85,6 +85,12 @@ public class AllayConfig {
     public String getFormattedDisplayName(ScoreboardItem item) { return advancedScoreboard.getFormattedDisplayName(item); }
     public void addMissingDefaultScoreboards() { advancedScoreboard.addMissingDefaults(); }
 
+    public boolean isSkipScore() { return advancedScoreboard.isSkipScore(); }
+    public void setSkipScore(boolean v) { advancedScoreboard.setSkipScore(v); }
+
+    public String getSkipPrefix() { return advancedScoreboard.getSkipPrefix(); }
+    public void setSkipPrefix(String v) { advancedScoreboard.setSkipPrefix(v); }
+
     public int getPermissionLevel() { return carpetBotManager.getPermissionLevel(); }
     public void setPermissionLevel(int v) { carpetBotManager.setPermissionLevel(v); }
 

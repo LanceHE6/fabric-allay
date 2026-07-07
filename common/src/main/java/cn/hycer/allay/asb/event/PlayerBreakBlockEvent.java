@@ -10,9 +10,11 @@ public class PlayerBreakBlockEvent {
 
     public static void onBreak(Player player) {
         var config = AllayConfig.getInstance();
+        String playerName = player.getScoreboardName();
+        if (config.isSkipScore() && playerName.startsWith(config.getSkipPrefix())) return;
+
         var item = config.getScoreboardByInternalName(AllayConfig.MINE_COUNT_INTERNAL_NAME);
         if (item == null) return;
-        String playerName = player.getScoreboardName();
         int playerScore = item.getDataValue(playerName, 0);
         item.updateData(playerName, ++playerScore);
 

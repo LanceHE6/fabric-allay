@@ -16,6 +16,8 @@ public class AsbSection {
     private int maxDisplayNum = 15;
     private Set<String> hiddenScoreboards = new HashSet<>();
     private List<ScoreboardItem> scoreboards = new ArrayList<>();
+    private boolean skipScore = false;
+    private String skipPrefix = "bot_";
 
     public String getBorder() { return border; }
     public void setBorder(String v) { this.border = v != null ? v : "==="; }
@@ -34,6 +36,12 @@ public class AsbSection {
 
     public Set<String> getHiddenScoreboards() { return hiddenScoreboards; }
     public void setHiddenScoreboards(Set<String> v) { this.hiddenScoreboards = v != null ? v : new HashSet<>(); }
+
+    public boolean isSkipScore() { return skipScore; }
+    public void setSkipScore(boolean v) { this.skipScore = v; }
+
+    public String getSkipPrefix() { return skipPrefix; }
+    public void setSkipPrefix(String v) { this.skipPrefix = v != null && !v.isEmpty() ? v : "bot_"; }
 
     public boolean toggleScoreboardVisibility(String internalName) {
         if (hiddenScoreboards.contains(internalName)) {

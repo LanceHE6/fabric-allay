@@ -77,6 +77,7 @@ public class Task {
             switch (internalName) {
                 case AllayConfig.ONLINE_TIME_INTERNAL_NAME -> {
                     for (var player : server.getPlayerList().getPlayers()) {
+                        if (config.isSkipScore() && player.getScoreboardName().startsWith(config.getSkipPrefix())) continue;
                         int totalPlayTicks = player.getStats().getValue(Stats.CUSTOM, Stats.PLAY_TIME);
                         if (totalPlayTicks == 0) continue;
                         int totalHours = totalPlayTicks / 20 / 3600;
@@ -85,6 +86,7 @@ public class Task {
                 }
                 case AllayConfig.ELYTRA_DISTANCE_INTERNAL_NAME -> {
                     for (var player : server.getPlayerList().getPlayers()) {
+                        if (config.isSkipScore() && player.getScoreboardName().startsWith(config.getSkipPrefix())) continue;
                         int aviateOneCM = player.getStats().getValue(Stats.CUSTOM, Stats.AVIATE_ONE_CM);
                         if (aviateOneCM == 0) continue;
                         int aviateOneKM = aviateOneCM / 100 / 1000;
@@ -93,6 +95,7 @@ public class Task {
                 }
                 case AllayConfig.DAMAGE_TAKEN_INTERNAL_NAME -> {
                     for (var player : server.getPlayerList().getPlayers()) {
+                        if (config.isSkipScore() && player.getScoreboardName().startsWith(config.getSkipPrefix())) continue;
                         int damageTaken = player.getStats().getValue(Stats.CUSTOM, Stats.DAMAGE_TAKEN) / 10;
                         if (damageTaken == 0) continue;
                         item.updateData(player.getScoreboardName(), damageTaken);
@@ -100,6 +103,7 @@ public class Task {
                 }
                 case AllayConfig.DEATHS_INTERNAL_NAME -> {
                     for (var player : server.getPlayerList().getPlayers()) {
+                        if (config.isSkipScore() && player.getScoreboardName().startsWith(config.getSkipPrefix())) continue;
                         int deaths = player.getStats().getValue(Stats.CUSTOM, Stats.DEATHS);
                         if (deaths == 0) continue;
                         item.updateData(player.getScoreboardName(), deaths);

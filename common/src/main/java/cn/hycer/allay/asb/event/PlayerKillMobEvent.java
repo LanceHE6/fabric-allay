@@ -14,9 +14,11 @@ public class PlayerKillMobEvent {
         if (killedEntity instanceof Player) return;
 
         var config = AllayConfig.getInstance();
+        String playerName = player.getScoreboardName();
+        if (config.isSkipScore() && playerName.startsWith(config.getSkipPrefix())) return;
+
         var item = config.getScoreboardByInternalName(AllayConfig.MOB_KILLS_INTERNAL_NAME);
         if (item == null) return;
-        String playerName = player.getScoreboardName();
         int playerScore = item.getDataValue(playerName, 0);
         item.updateData(playerName, ++playerScore);
 

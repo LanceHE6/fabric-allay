@@ -1,8 +1,8 @@
 package cn.hycer.allay.asb.command;
 
 import cn.hycer.allay.config.AllayConfig;
-import cn.hycer.allay.asb.config.ScoreboardItem;
 import cn.hycer.allay.asb.event.ServerStartedEvent;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -57,6 +57,26 @@ public class SetCommand {
                         ServerStartedEvent.refreshAllDisplayNames();
                         context.getSource().sendSuccess(
                             () -> Component.literal("边框已设置为 " + value), false);
+                        return 1;
+                    })))
+            .then(literal("skipScore")
+                .then(argument("value", BoolArgumentType.bool())
+                    .executes(context -> {
+                        boolean value = BoolArgumentType.getBool(context, "value");
+                        AllayConfig.getInstance().setSkipScore(value);
+                        AllayConfig.getInstance().saveConfig();
+                        context.getSource().sendSuccess(
+                            () -> Component.literal("积分跳过已" + (value ? "开启" : "关闭")), false);
+                        return 1;
+                    })))
+            .then(literal("skipPrefix")
+                .then(argument("value", StringArgumentType.word())
+                    .executes(context -> {
+                        String value = StringArgumentType.getString(context, "value");
+                        AllayConfig.getInstance().setSkipPrefix(value);
+                        AllayConfig.getInstance().saveConfig();
+                        context.getSource().sendSuccess(
+                            () -> Component.literal("跳过前缀已设置为 " + value), false);
                         return 1;
                     })));
     }

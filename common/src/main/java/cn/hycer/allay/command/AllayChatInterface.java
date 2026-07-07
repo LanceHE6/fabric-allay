@@ -79,6 +79,12 @@ public final class AllayChatInterface {
                 .append(suggestBtn("[改]", ASB + "set maxDisplayNum ")));
         src.sendSystemMessage(Component.literal("  边框: " + cfg.getBorder() + "  ")
                 .append(suggestBtn("[改]", ASB + "set border ")));
+        src.sendSystemMessage(Component.literal("  积分跳过: " + (cfg.isSkipScore() ? "开" : "关") + "  ")
+                .append(suggestBtn("[改]", ASB + "set skipScore ")));
+        if (cfg.isSkipScore()) {
+            src.sendSystemMessage(Component.literal("  跳过前缀: " + cfg.getSkipPrefix() + "  ")
+                    .append(suggestBtn("[改]", ASB + "set skipPrefix ")));
+        }
 
         src.sendSystemMessage(subtitle("假人"));
         src.sendSystemMessage(Component.literal("  名前缀: " + cfg.getBotNamePrefix() + "  ")
