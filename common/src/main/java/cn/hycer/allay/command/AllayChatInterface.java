@@ -117,7 +117,7 @@ public final class AllayChatInterface {
     private static final String[][] ALL_FEATURES = {
             {"fragileObsidian", "易碎黑曜石", "黑曜石挖掘速度等同石头"},
             {"superTNT", "超级TNT", "TNT可破坏黑曜石和刷怪笼"},
-            {"damageIndicator", "伤害跳字", "攻击时在目标上方显示伤害数值（每玩家独立）"},
+            {"damageIndicator", "伤害跳字", "攻击时在目标上方显示伤害数值"},
     };
 
     public static int showFeatureList(CommandContext<CommandSourceStack> ctx) {

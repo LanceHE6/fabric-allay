@@ -131,7 +131,7 @@ public class AllayCommand {
         else if ("superTNT".equals(ruleName)) mgr.setSuperTNT(value);
 
         String permCmd = "/allay setDefault " + ruleName + " " + value;
-        MutableComponent msg = Component.literal(displayName + "已" + (value ? "开启" : "关闭") + "（重启后失效）")
+        MutableComponent msg = Component.literal(displayName + "已" + (value ? "开启" : "关闭"))
                 .append(Component.literal("  [永久更改？]")
                         .withStyle(s -> s
                                 .withClickEvent(new ClickEvent.SuggestCommand(permCmd))
