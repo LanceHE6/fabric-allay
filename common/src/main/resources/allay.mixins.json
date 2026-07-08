@@ -6,7 +6,8 @@
   "mixins": [
     "ServerCommonPacketListenerImplAccessor",
     "FragileObsidianMixin",
-    "SuperWorldEaterMixin"
+    "SuperWorldEaterMixin",
+    "PlayerCritCaptureMixin"
   ],
   "injectors": {
     "defaultRequire": 1

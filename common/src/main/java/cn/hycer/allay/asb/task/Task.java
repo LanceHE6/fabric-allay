@@ -4,7 +4,7 @@ import cn.hycer.allay.Allay;
 import cn.hycer.allay.config.AllayConfig;
 import cn.hycer.allay.asb.AdvancedScoreboardModule;
 import cn.hycer.allay.asb.config.ScoreboardItem;
-import cn.hycer.allay.feature.DamageIndicator;
+import cn.hycer.allay.feature.damage.DamageIndicator;
 import cn.hycer.allay.mixin.ServerCommonPacketListenerImplAccessor;
 import cn.hycer.allay.asb.render.CustomScoreboardRenderer;
 import net.minecraft.network.chat.Component;

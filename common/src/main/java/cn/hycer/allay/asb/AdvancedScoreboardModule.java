@@ -1,8 +1,8 @@
 package cn.hycer.allay.asb;
 
 import cn.hycer.allay.Allay;
-import cn.hycer.allay.feature.DamageIndicator;
-import cn.hycer.allay.feature.DamageIndicatorHook;
+import cn.hycer.allay.feature.damage.DamageIndicator;
+import cn.hycer.allay.feature.damage.DamageIndicatorHook;
 import cn.hycer.allay.feature.PlayerPrefs;
 import cn.hycer.allay.asb.event.*;
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityCombatEvents;
