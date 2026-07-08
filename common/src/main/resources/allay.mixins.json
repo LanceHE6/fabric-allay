@@ -7,7 +7,13 @@
     "ServerCommonPacketListenerImplAccessor",
     "FragileObsidianMixin",
     "SuperWorldEaterMixin",
-    "PlayerCritCaptureMixin"
+    "PlayerCritCaptureMixin",
+    "ActualDamageTracker",
+    "DisplayInvoker",
+    "LivingEntityInvoker",
+    "ArmorStandDamageMixin",
+    "TextDisplayAccessor",
+    "TextDisplayInvoker"
   ],
   "injectors": {
     "defaultRequire": 1
