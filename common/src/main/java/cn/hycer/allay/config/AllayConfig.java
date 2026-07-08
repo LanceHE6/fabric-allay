@@ -3,9 +3,6 @@ package cn.hycer.allay.config;
 import cn.hycer.allay.asb.config.ScoreboardItem;
 import cn.hycer.allay.cbm.model.BotGroup;
 import cn.hycer.allay.cbm.model.BotPreset;
-import cn.hycer.allay.config.AsbSection;
-import cn.hycer.allay.config.CbmSection;
-import cn.hycer.allay.config.TkSection;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -65,64 +62,62 @@ public class AllayConfig {
     private Map<String, Boolean> featureDefaults = new LinkedHashMap<>();
 
     // ═══════════════════════════════════════════════════════════
-    //  Delegating accessors
+    //  Delegating accessors — @JsonIgnore on getters prevents
+    //  duplicate serialization alongside the nested objects above.
+    //  Setters are left without @JsonIgnore for backward-compatible
+    //  deserialization of top-level keys.
     // ═══════════════════════════════════════════════════════════
 
-    public String getBorder() { return advancedScoreboard.getBorder(); }
+    @JsonIgnore public String getBorder() { return advancedScoreboard.getBorder(); }
     public void setBorder(String v) { advancedScoreboard.setBorder(v); }
 
-    public int getSwitchInterval() { return advancedScoreboard.getSwitchInterval(); }
+    @JsonIgnore public int getSwitchInterval() { return advancedScoreboard.getSwitchInterval(); }
     public void setSwitchInterval(int v) { advancedScoreboard.setSwitchInterval(v); }
 
-    public int getSaveInterval() { return advancedScoreboard.getSaveInterval(); }
+    @JsonIgnore public int getSaveInterval() { return advancedScoreboard.getSaveInterval(); }
     public void setSaveInterval(int v) { advancedScoreboard.setSaveInterval(v); }
 
-    public int getMaxDisplayNum() { return advancedScoreboard.getMaxDisplayNum(); }
+    @JsonIgnore public int getMaxDisplayNum() { return advancedScoreboard.getMaxDisplayNum(); }
     public void setMaxDisplayNum(int v) { advancedScoreboard.setMaxDisplayNum(v); }
 
-    public List<ScoreboardItem> getScoreboards() { return advancedScoreboard.getScoreboards(); }
+    @JsonIgnore public List<ScoreboardItem> getScoreboards() { return advancedScoreboard.getScoreboards(); }
     public void setScoreboards(List<ScoreboardItem> v) { advancedScoreboard.setScoreboards(v); }
 
-    public Set<String> getHiddenScoreboards() { return advancedScoreboard.getHiddenScoreboards(); }
+    @JsonIgnore public Set<String> getHiddenScoreboards() { return advancedScoreboard.getHiddenScoreboards(); }
     public void setHiddenScoreboards(Set<String> v) { advancedScoreboard.setHiddenScoreboards(v); }
 
-    public boolean toggleScoreboardVisibility(String name) { return advancedScoreboard.toggleScoreboardVisibility(name); }
-    public ScoreboardItem getScoreboardByInternalName(String name) { return advancedScoreboard.getScoreboardByInternalName(name); }
-    public String getFormattedDisplayName(ScoreboardItem item) { return advancedScoreboard.getFormattedDisplayName(item); }
-    public void addMissingDefaultScoreboards() { advancedScoreboard.addMissingDefaults(); }
+    @JsonIgnore public boolean toggleScoreboardVisibility(String name) { return advancedScoreboard.toggleScoreboardVisibility(name); }
+    @JsonIgnore public ScoreboardItem getScoreboardByInternalName(String name) { return advancedScoreboard.getScoreboardByInternalName(name); }
+    @JsonIgnore public String getFormattedDisplayName(ScoreboardItem item) { return advancedScoreboard.getFormattedDisplayName(item); }
+    @JsonIgnore public void addMissingDefaultScoreboards() { advancedScoreboard.addMissingDefaults(); }
 
-    public boolean isSkipScore() { return advancedScoreboard.isSkipScore(); }
+    @JsonIgnore public boolean isSkipScore() { return advancedScoreboard.isSkipScore(); }
     public void setSkipScore(boolean v) { advancedScoreboard.setSkipScore(v); }
 
-    public String getSkipPrefix() { return advancedScoreboard.getSkipPrefix(); }
+    @JsonIgnore public String getSkipPrefix() { return advancedScoreboard.getSkipPrefix(); }
     public void setSkipPrefix(String v) { advancedScoreboard.setSkipPrefix(v); }
 
-    public int getPermissionLevel() { return carpetBotManager.getPermissionLevel(); }
+    @JsonIgnore public int getPermissionLevel() { return carpetBotManager.getPermissionLevel(); }
     public void setPermissionLevel(int v) { carpetBotManager.setPermissionLevel(v); }
 
-    public String getBotNamePrefix() { return carpetBotManager.getBotNamePrefix(); }
+    @JsonIgnore public String getBotNamePrefix() { return carpetBotManager.getBotNamePrefix(); }
     public void setBotNamePrefix(String v) { carpetBotManager.setBotNamePrefix(v); }
 
-    public boolean isRequirePrefix() { return carpetBotManager.isRequirePrefix(); }
+    @JsonIgnore public boolean isRequirePrefix() { return carpetBotManager.isRequirePrefix(); }
     public void setRequirePrefix(boolean v) { carpetBotManager.setRequirePrefix(v); }
 
-    public List<String> getAutoLoadBots() { return carpetBotManager.getAutoLoadBots(); }
+    @JsonIgnore public List<String> getAutoLoadBots() { return carpetBotManager.getAutoLoadBots(); }
     public void setAutoLoadBots(List<String> v) { carpetBotManager.setAutoLoadBots(v); }
 
-    public List<String> getAutoLoadGroups() { return carpetBotManager.getAutoLoadGroups(); }
+    @JsonIgnore public List<String> getAutoLoadGroups() { return carpetBotManager.getAutoLoadGroups(); }
     public void setAutoLoadGroups(List<String> v) { carpetBotManager.setAutoLoadGroups(v); }
 
-    public String getTkDataFile() { return trialKeeper.getDataFile(); }
+    @JsonIgnore public String getTkDataFile() { return trialKeeper.getDataFile(); }
     public void setTkDataFile(String v) { trialKeeper.setDataFile(v); }
 
-    @JsonIgnore
-    public AsbSection getAsb() { return advancedScoreboard; }
-
-    @JsonIgnore
-    public CbmSection getCbm() { return carpetBotManager; }
-
-    @JsonIgnore
-    public TkSection getTk() { return trialKeeper; }
+    @JsonIgnore public AsbSection getAsb() { return advancedScoreboard; }
+    @JsonIgnore public CbmSection getCbm() { return carpetBotManager; }
+    @JsonIgnore public TkSection getTk() { return trialKeeper; }
 
     // ── Feature defaults ──────────────────────────────────────
 
@@ -171,7 +166,6 @@ public class AllayConfig {
         AllayConfig cfg = new AllayConfig();
         cfg.configFile = file;
 
-        // Migrate old config/allay.json → config/allay/allay.json
         Path oldAllayJson = configDir.resolve("allay.json");
         if (Files.exists(oldAllayJson)) {
             try {
@@ -209,8 +203,7 @@ public class AllayConfig {
         }
     }
 
-    @JsonIgnore
-    public File getConfigFile() { return configFile; }
+    @JsonIgnore public File getConfigFile() { return configFile; }
     public void setConfigFile(File f) { this.configFile = f; }
 
     // ═══════════════════════════════════════════════════════════
