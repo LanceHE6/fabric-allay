@@ -37,25 +37,32 @@ public class DamageIndicator {
     private static final Quaternionf IDENTITY_ROTATION = new Quaternionf(0, 0, 0, 1);
 
     private static final List<TimedDisplay> displays = new ArrayList<>();
-    private static ServerLevel overworld;
     private static final Map<Long, MergeState> mergeStates = new HashMap<>();
 
     private static final EntityDataAccessor<Byte> STYLE_FLAGS_ID = TextDisplayAccessor.getStyleFlagsId();
 
     private static class TimedDisplay {
+        final ServerLevel level;   // dimension the display lives in
         final int entityId;
         int ticks;
-        TimedDisplay(int entityId) { this.entityId = entityId; this.ticks = DURATION_TICKS; }
+
+        TimedDisplay(ServerLevel level, int entityId) {
+            this.level = level;
+            this.entityId = entityId;
+            this.ticks = DURATION_TICKS;
+        }
     }
 
     private static class MergeState {
+        final ServerLevel level;
         float totalDamage;
         int displayEntityId;
         int ticksRemaining;
+
+        MergeState(ServerLevel level) { this.level = level; }
     }
 
     public static void init(MinecraftServer server) {
-        overworld = server.overworld();
         for (ServerLevel level : server.getAllLevels()) {
             for (Entity entity : level.getAllEntities()) {
                 if (entity.entityTags().contains(TAG)) entity.discard();
@@ -74,7 +81,7 @@ public class DamageIndicator {
         if (state != null && state.ticksRemaining > DURATION_TICKS - MERGE_WINDOW_TICKS) {
             state.totalDamage += dealt;
             state.ticksRemaining = DURATION_TICKS;
-            updateDisplay(level, state.displayEntityId, state.totalDamage, crit);
+            updateDisplay(state.level, state.displayEntityId, state.totalDamage, crit);
         } else {
             Vec3 pos = target.position().add(
                     (RANDOM.nextDouble() - 0.5) * 1.2,
@@ -95,18 +102,18 @@ public class DamageIndicator {
 
             level.addFreshEntity(display);
 
-            MergeState newState = new MergeState();
+            MergeState newState = new MergeState(level);
             newState.totalDamage = dealt;
             newState.displayEntityId = display.getId();
             newState.ticksRemaining = DURATION_TICKS;
             mergeStates.put(key, newState);
-            displays.add(new TimedDisplay(display.getId()));
+
+            displays.add(new TimedDisplay(level, display.getId()));
         }
     }
 
     private static void updateDisplay(ServerLevel level, int entityId, float damage, boolean crit) {
-        if (overworld == null) return;
-        var entity = overworld.getEntity(entityId);
+        var entity = level.getEntity(entityId);
         if (entity instanceof Display.TextDisplay display) {
             display.setText(formatDamage(damage, crit));
             applyScale(display, damage);
@@ -114,15 +121,12 @@ public class DamageIndicator {
     }
 
     private static void applyStyle(Display.TextDisplay display) {
-        // Make background fully transparent (default is 25% black = 0x40000000)
         ((TextDisplayInvoker) display).invokeSetBackgroundColor(0);
 
-        // Ensure text shadow flag is cleared
         byte flags = display.getEntityData().get(STYLE_FLAGS_ID);
         flags &= ~Display.TextDisplay.FLAG_SHADOW;
         display.getEntityData().set(STYLE_FLAGS_ID, flags);
 
-        // Disable entity ground shadow
         DisplayInvoker di = (DisplayInvoker) display;
         di.invokeSetShadowRadius(0);
         di.invokeSetShadowStrength(0);
@@ -148,10 +152,8 @@ public class DamageIndicator {
             TimedDisplay td = it.next();
             td.ticks--;
             if (td.ticks <= 0) {
-                if (overworld != null) {
-                    var entity = overworld.getEntity(td.entityId);
-                    if (entity != null) entity.discard();
-                }
+                var entity = td.level.getEntity(td.entityId);
+                if (entity != null) entity.discard();
                 it.remove();
             }
         }

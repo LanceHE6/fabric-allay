@@ -12,6 +12,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -56,13 +57,13 @@ public final class BatchHandlers {
             String cmd = String.format(Locale.ROOT,
                     "player %s spawn at %.2f %.2f %.2f facing %.2f %.2f in %s",
                     name, x, y, z, yaw, pitch, dim);
-            src.getServer().getCommands().performPrefixedCommand(
-                    src.getServer().createCommandSourceStack(), cmd);
+            // Use summoner's CommandSourceStack so bot inherits game mode
+            src.getServer().getCommands().performPrefixedCommand(src, cmd);
         }
         int count = end - start + 1;
         src.sendSystemMessage(Component.translatableWithFallback(
                 "carpetbotmanager.command.batch.spawn.success",
-                "已召唤 %d 个 Bot：%s_%d ~ %s_%d。", count, prefix, start, prefix, end));
+                "已召唤 %s 个 Bot：%s_%s ~ %s_%s。", count, prefix, start, prefix, end));
         return 1;
     }
 
@@ -99,7 +100,7 @@ public final class BatchHandlers {
         int count = names.size();
         src.sendSystemMessage(Component.translatableWithFallback(
                 "carpetbotmanager.command.batch.save.success",
-                "已将 %d 个 Bot 预设保存到分组 '%s'：%s_%d ~ %s_%d。",
+                "已将 %s 个 Bot 预设保存到分组 '%s'：%s_%s ~ %s_%s。",
                 count, prefix, prefix, start, prefix, end));
         return 1;
     }
@@ -125,9 +126,9 @@ public final class BatchHandlers {
         int count = end - start + 1;
         src.sendSystemMessage(Component.translatableWithFallback(
                 "carpetbotmanager.command.batch.action.success",
-                "%s完成：%d/%d 个 Bot %s。", desc, done, count, desc));
+                "%s完成：%s/%s 个 Bot %s。", desc, done, count, desc));
         if (miss > 0) src.sendSystemMessage(Component.translatableWithFallback(
-                "carpetbotmanager.command.batch.action.missing", "注意：%d 个 Bot 不在线，已跳过。", miss));
+                "carpetbotmanager.command.batch.action.missing", "注意：%s 个 Bot 不在线，已跳过。", miss));
         return 1;
     }
 
