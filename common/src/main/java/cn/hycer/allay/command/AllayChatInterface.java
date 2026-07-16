@@ -105,6 +105,8 @@ public final class AllayChatInterface {
                 .append(suggestBtn("[改]", ALLAY + "fragileObsidian ")));
         src.sendSystemMessage(Component.literal("  超级TNT: " + (mgr.isSuperTNT() ? "开" : "关") + "  ")
                 .append(suggestBtn("[改]", ALLAY + "superTNT ")));
+        src.sendSystemMessage(Component.literal("  易碎玻璃: " + (mgr.isFragileGlass() ? "开" : "关") + "  ")
+                .append(suggestBtn("[改]", ALLAY + "fragileGlass ")));
 
         src.sendSystemMessage(Component.literal("").append(back(ALLAY)));
         return 1;
@@ -117,7 +119,8 @@ public final class AllayChatInterface {
     private static final String[][] ALL_FEATURES = {
             {"fragileObsidian", "易碎黑曜石", "黑曜石挖掘速度等同石头"},
             {"superTNT", "超级TNT", "TNT可破坏黑曜石和刷怪笼"},
-            {"damageIndicator", "伤害跳字", "攻击时在目标上方显示伤害数值"},
+            {"fragileGlass", "易碎玻璃", "所有玻璃方块/板可被镐子秒破"},
+            {"damageIndicator", "伤害跳字", "攻击时在目标上方显示伤害数值（每玩家独立）"},
     };
 
     public static int showFeatureList(CommandContext<CommandSourceStack> ctx) {
