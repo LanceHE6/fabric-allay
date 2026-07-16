@@ -34,6 +34,7 @@ public class AllayConfig {
     public static final String DAMAGE_TAKEN_INTERNAL_NAME = "damage_taken";
     public static final String DEATHS_INTERNAL_NAME = "deaths";
     public static final String MOB_KILLS_INTERNAL_NAME = "mob_kills";
+    public static final String EXPERIENCE_LEVEL_INTERNAL_NAME = "experience_level";
     public static final String LATENCY_INTERNAL_NAME = "latency";
 
     @JsonIgnore
@@ -157,6 +158,7 @@ public class AllayConfig {
                 AllayConfig cfg = OBJECT_MAPPER.readValue(file, AllayConfig.class);
                 cfg.configFile = file;
                 cfg.advancedScoreboard.addMissingDefaults();
+                cfg.saveConfig();
                 return cfg;
             } catch (IOException e) {
                 LOGGER.error("Failed to load allay config, using defaults: {}", e.getMessage());

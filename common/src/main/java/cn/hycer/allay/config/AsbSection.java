@@ -71,6 +71,7 @@ public class AsbSection {
                 {AllayConfig.DAMAGE_TAKEN_INTERNAL_NAME, "受到伤害"},
                 {AllayConfig.DEATHS_INTERNAL_NAME, "死亡次数"},
                 {AllayConfig.MOB_KILLS_INTERNAL_NAME, "击杀生物数"},
+                {AllayConfig.EXPERIENCE_LEVEL_INTERNAL_NAME, "经验等级"},
                 {AllayConfig.LATENCY_INTERNAL_NAME, "延迟(ms)"},
         };
         for (String[] def : defaults) {
@@ -90,6 +91,7 @@ public class AsbSection {
                 {AllayConfig.DAMAGE_TAKEN_INTERNAL_NAME, "受到伤害"},
                 {AllayConfig.DEATHS_INTERNAL_NAME, "死亡次数"},
                 {AllayConfig.MOB_KILLS_INTERNAL_NAME, "击杀生物数"},
+                {AllayConfig.EXPERIENCE_LEVEL_INTERNAL_NAME, "经验等级"},
                 {AllayConfig.LATENCY_INTERNAL_NAME, "延迟(ms)"},
         };
         for (String[] def : defaults) {

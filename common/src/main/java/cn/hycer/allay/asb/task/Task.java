@@ -49,6 +49,7 @@ public class Task {
             Set<String> hidden = config.getHiddenScoreboards();
             List<ScoreboardItem> visible = allScoreboards.stream()
                 .filter(sb -> !hidden.contains(sb.getInternalName()))
+                .filter(sb -> !AllayConfig.LATENCY_INTERNAL_NAME.equals(sb.getInternalName()))
                 .toList();
             if (visible.isEmpty()) return;
 
@@ -110,6 +111,14 @@ public class Task {
                         int damageTaken = player.getStats().getValue(Stats.CUSTOM, Stats.DAMAGE_TAKEN) / 10;
                         if (damageTaken == 0) continue;
                         item.updateData(player.getScoreboardName(), damageTaken);
+                    }
+                }
+                case AllayConfig.EXPERIENCE_LEVEL_INTERNAL_NAME -> {
+                    for (var player : server.getPlayerList().getPlayers()) {
+                        if (config.isSkipScore() && player.getScoreboardName().startsWith(config.getSkipPrefix())) continue;
+                        int level = player.experienceLevel;
+                        if (level == 0) continue;
+                        item.updateData(player.getScoreboardName(), level);
                     }
                 }
                 case AllayConfig.DEATHS_INTERNAL_NAME -> {
