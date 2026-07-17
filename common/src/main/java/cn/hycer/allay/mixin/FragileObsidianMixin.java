@@ -42,7 +42,10 @@ public class FragileObsidianMixin {
         if (!fragileObsidian && !fragileGlass) return;
         if (!player.hasCorrectToolForDrops(state)) return;
 
-        level.destroyBlock(pos, true, player);
+        // Manually harvest with correct tool/drop handling (Silk Touch etc.)
+        state.getBlock().playerDestroy(level, player, pos, state,
+                level.getBlockEntity(pos), player.getMainHandItem());
+        level.removeBlock(pos, false);
         ci.cancel();
     }
 }
