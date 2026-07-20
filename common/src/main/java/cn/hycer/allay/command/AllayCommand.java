@@ -7,6 +7,7 @@ import cn.hycer.allay.cbm.command.handler.*;
 import cn.hycer.allay.cbm.command.tree.*;
 import cn.hycer.allay.config.AllayConfig;
 import cn.hycer.allay.feature.FeatureManager;
+import cn.hycer.allay.feature.HereManager;
 import cn.hycer.allay.tk.TrialKeeperCommand;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -14,6 +15,7 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.*;
+import net.minecraft.server.level.ServerPlayer;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -99,6 +101,34 @@ public class AllayCommand {
                             .executes(ctx -> removeFeatureDefault(ctx,
                                     StringArgumentType.getString(ctx, "rule"))));
 
+            // ── /allay here ──────────────────────────────────
+            // /allay here [to <target>] — broadcast position, optional direction to target
+
+            var here = literal("here")
+                    .executes(ctx -> {
+                        ServerPlayer player = ctx.getSource().getPlayerOrException();
+                        HereManager.execute(player, null);
+                        ctx.getSource().sendSuccess(
+                                () -> Component.literal("已广播你的位置"), false);
+                        return 1;
+                    })
+                    .then(literal("to")
+                        .then(argument("target", StringArgumentType.word())
+                            .executes(ctx -> {
+                                ServerPlayer player = ctx.getSource().getPlayerOrException();
+                                String targetName = StringArgumentType.getString(ctx, "target");
+                                ServerPlayer target = ctx.getSource().getServer().getPlayerList()
+                                        .getPlayerByName(targetName);
+                                if (target == null) {
+                                    ctx.getSource().sendFailure(Component.literal("玩家不在线"));
+                                    return 0;
+                                }
+                                HereManager.execute(player, target);
+                                ctx.getSource().sendSuccess(
+                                        () -> Component.literal("已对 " + target.getScoreboardName() + " 发送你的位置"), false);
+                                return 1;
+                            })));
+
             LiteralCommandNode<CommandSourceStack> allayNode = dispatcher.register(
                 literal("allay")
                     .executes(AllayChatInterface::showMainMenu)
@@ -111,6 +141,7 @@ public class AllayCommand {
                     .then(damageIndicator)
                     .then(setDefault)
                     .then(removeDefault)
+                    .then(here)
                     .then(asb)
                     .then(cbot)
                     .then(tk)
@@ -122,6 +153,8 @@ public class AllayCommand {
                     dispatcher.getRoot().getChild("allay").getChild("cbot")));
             dispatcher.register(literal("trialkeeper").redirect(
                     dispatcher.getRoot().getChild("allay").getChild("tk")));
+            dispatcher.register(literal("here").redirect(
+                    dispatcher.getRoot().getChild("allay").getChild("here")));
         });
     }
 
