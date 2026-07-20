@@ -18,7 +18,7 @@ import java.util.UUID;
  */
 public final class AllayChatInterface {
 
-    private static final String ALLAY = "/allay ";
+    private static final String ALLAY = "allay ";
     private static final String ASB = ALLAY + "asb ";
     private static final String CBOT = ALLAY + "cbot ";
     private static final String TK = ALLAY + "tk ";

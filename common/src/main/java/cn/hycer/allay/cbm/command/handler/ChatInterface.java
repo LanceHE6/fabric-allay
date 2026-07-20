@@ -10,7 +10,7 @@ import net.minecraft.network.chat.*;
 
 public final class ChatInterface {
 
-    private static final String ALLAY_CBOT = "/allay cbot ";
+    private static final String ALLAY_CBOT = "allay cbot ";
 
     private ChatInterface() {}
 
