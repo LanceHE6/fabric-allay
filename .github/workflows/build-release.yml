@@ -67,13 +67,13 @@ jobs:
       - name: Generate changelog
         run: |
           TAG_NAME=${GITHUB_REF#refs/tags/}
-          git-cliff --tag "$TAG_NAME" -o CHANGELOG_BODY.md
+          git-cliff --tag-pattern "V*" --tag "$TAG_NAME" -o CHANGELOG_BODY.md
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: ${{ env.MOD_VERSION }}
-          tag_name: ${{ env.MOD_VERSION }}
+          name: ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
           body_path: CHANGELOG_BODY.md
           files: ./outputs/*.jar
           draft: false
