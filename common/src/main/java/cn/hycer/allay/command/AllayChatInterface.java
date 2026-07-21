@@ -18,10 +18,10 @@ import java.util.UUID;
  */
 public final class AllayChatInterface {
 
-    private static final String ALLAY = "allay ";
-    private static final String ASB = ALLAY + "asb ";
-    private static final String CBOT = ALLAY + "cbot ";
-    private static final String TK = ALLAY + "tk ";
+    private static final String ALLAY = "allay";
+    private static final String ASB = ALLAY + " asb ";
+    private static final String CBOT = ALLAY + " cbot ";
+    private static final String TK = ALLAY + " tk ";
 
     private AllayChatInterface() {}
 
@@ -38,9 +38,9 @@ public final class AllayChatInterface {
                 .append(btn(" [假人] ", CBOT + "ui"))
                 .append(btn(" [试炼] ", TK + "ui")));
         src.sendSystemMessage(Component.literal("")
-                .append(btn(" [设置] ", ALLAY + "config"))
-                .append(btn(" [特性] ", ALLAY + "features"))
-                .append(btn(" [帮助] ", ALLAY + "help")));
+                .append(btn(" [设置] ", ALLAY + " config"))
+                .append(btn(" [特性] ", ALLAY + " features"))
+                .append(btn(" [帮助] ", ALLAY + " help")));
         return 1;
     }
 
@@ -102,11 +102,11 @@ public final class AllayChatInterface {
         var mgr = FeatureManager.getInstance();
         src.sendSystemMessage(subtitle("功能开关"));
         src.sendSystemMessage(Component.literal("  易碎黑曜石: " + (mgr.isFragileObsidian() ? "开" : "关") + "  ")
-                .append(suggestBtn("[改]", ALLAY + "fragileObsidian ")));
+                .append(suggestBtn("[改]", ALLAY + " fragileObsidian ")));
         src.sendSystemMessage(Component.literal("  超级TNT: " + (mgr.isSuperTNT() ? "开" : "关") + "  ")
-                .append(suggestBtn("[改]", ALLAY + "superTNT ")));
+                .append(suggestBtn("[改]", ALLAY + " superTNT ")));
         src.sendSystemMessage(Component.literal("  易碎玻璃: " + (mgr.isFragileGlass() ? "开" : "关") + "  ")
-                .append(suggestBtn("[改]", ALLAY + "fragileGlass ")));
+                .append(suggestBtn("[改]", ALLAY + " fragileGlass ")));
 
         src.sendSystemMessage(Component.literal("").append(back(ALLAY)));
         return 1;
@@ -154,9 +154,9 @@ public final class AllayChatInterface {
             line.append(Component.literal("  " + display + " " + status));
             line.append(Component.literal("  ").withStyle(s -> s.withColor(TextColor.fromRgb(0x888888)))
                     .append(suggestBtn(current ? "[关闭]" : "[开启]",
-                            ALLAY + name + " " + !current)));
+                            ALLAY + " " + name + " " + !current)));
             if (!isPerPlayer && perm) {
-                line.append(btn(" [移除永久]", ALLAY + "removeDefault " + name));
+                line.append(btn(" [移除永久]", ALLAY + " removeDefault " + name));
             }
 
             src.sendSystemMessage(line);
