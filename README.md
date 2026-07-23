@@ -46,6 +46,8 @@ vault / trial spawner / ominous vault 保存与恢复，敏感操作两步确认
 | fragileObsidian | 黑曜石/哭泣黑曜石挖掘速度等同石头 |
 | superTNT | TNT 可破坏黑曜石、哭泣黑曜石和刷怪笼 |
 | fragileGlass | 所有玻璃方块/板可被秒破 |
+| experienceBottle | Shift+右键玻璃瓶将经验点转换为附魔瓶 |
+| phantomSuppressor | 阻止幻翼自然生成 |
 
 个人特性（每玩家独立）：
 
@@ -64,6 +66,8 @@ vault / trial spawner / ominous vault 保存与恢复，敏感操作两步确认
 ├── fragileObsidian <true|false>        # 全局特性
 ├── superTNT <true|false>
 ├── fragileGlass <true|false>
+├── experienceBottle <true|false>
+├── phantomSuppressor <true|false>
 ├── damageIndicator <true|false>         # 个人特性
 ├── setDefault <规则> <true|false>       # 永久设置
 ├── removeDefault <规则>

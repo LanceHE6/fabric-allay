@@ -8,6 +8,7 @@ public class FeatureManager {
     private boolean superTNT;
     private boolean fragileGlass;
     private boolean experienceBottle;
+    private boolean phantomSuppressor;
 
     private FeatureManager() {
         reloadDefaults();
@@ -21,6 +22,7 @@ public class FeatureManager {
         superTNT      = cfg.hasFeatureDefault("superTNT")      && cfg.getFeatureDefault("superTNT");
         fragileGlass  = cfg.hasFeatureDefault("fragileGlass")  && cfg.getFeatureDefault("fragileGlass");
         experienceBottle = cfg.hasFeatureDefault("experienceBottle") && cfg.getFeatureDefault("experienceBottle");
+        phantomSuppressor = cfg.hasFeatureDefault("phantomSuppressor") && cfg.getFeatureDefault("phantomSuppressor");
     }
 
     public boolean isFragileObsidian() { return fragileObsidian; }
@@ -34,4 +36,7 @@ public class FeatureManager {
 
     public boolean isExperienceBottle() { return experienceBottle; }
     public void setExperienceBottle(boolean v) { this.experienceBottle = v; }
+
+    public boolean isPhantomSuppressor() { return phantomSuppressor; }
+    public void setPhantomSuppressor(boolean v) { this.phantomSuppressor = v; }
 }

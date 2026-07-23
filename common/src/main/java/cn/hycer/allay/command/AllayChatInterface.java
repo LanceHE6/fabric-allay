@@ -109,6 +109,8 @@ public final class AllayChatInterface {
                 .append(suggestBtn("[改]", ALLAY + " fragileGlass ")));
         src.sendSystemMessage(Component.literal("  经验玻璃瓶: " + (mgr.isExperienceBottle() ? "开" : "关") + "  ")
                 .append(suggestBtn("[改]", ALLAY + " experienceBottle ")));
+        src.sendSystemMessage(Component.literal("  幻翼抑制器: " + (mgr.isPhantomSuppressor() ? "开" : "关") + "  ")
+                .append(suggestBtn("[改]", ALLAY + " phantomSuppressor ")));
 
         src.sendSystemMessage(Component.literal("").append(back(ALLAY)));
         return 1;
@@ -123,6 +125,7 @@ public final class AllayChatInterface {
             {"superTNT", "超级TNT", "TNT可破坏黑曜石和刷怪笼"},
             {"fragileGlass", "易碎玻璃", "所有玻璃方块/板可被镐子秒破"},
             {"experienceBottle", "经验玻璃瓶", "Shift+右键玻璃瓶将3-11经验点转换为附魔瓶"},
+            {"phantomSuppressor", "幻翼抑制器", "阻止幻翼自然生成"},
             {"damageIndicator", "伤害跳字", "攻击时在目标上方显示伤害数值（每玩家独立）"},
     };
 

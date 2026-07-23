@@ -13,7 +13,8 @@
     "LivingEntityInvoker",
     "ArmorStandDamageMixin",
     "TextDisplayAccessor",
-    "TextDisplayInvoker"
+    "TextDisplayInvoker",
+    "PhantomSuppressorMixin"
   ],
   "injectors": {
     "defaultRequire": 1
