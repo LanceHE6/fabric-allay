@@ -15,6 +15,7 @@ public final class UiCommandTree {
 
     public static void addNodes(LiteralArgumentBuilder<CommandSourceStack> root) {
         root.then(literal("ui")
+                .executes(ChatInterface::showMainMenu)
                 .then(literal("bots").executes(ChatInterface::showBotList))
                 .then(literal("groups").executes(ChatInterface::showGroupList))
                 .then(literal("autoload")
