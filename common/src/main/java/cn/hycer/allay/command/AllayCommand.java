@@ -75,6 +75,11 @@ public class AllayCommand {
                             .executes(ctx -> featureToggle(ctx, "fragileGlass",
                                     "易碎玻璃", BoolArgumentType.getBool(ctx, "value"))));
 
+            var experienceBottle = literal("experienceBottle")
+                    .then(argument("value", BoolArgumentType.bool())
+                            .executes(ctx -> featureToggle(ctx, "experienceBottle",
+                                    "经验玻璃瓶", BoolArgumentType.getBool(ctx, "value"))));
+
             // Per-player toggle: /allay damageIndicator true|false
             var damageIndicator = literal("damageIndicator")
                     .then(argument("value", BoolArgumentType.bool())
@@ -138,6 +143,7 @@ public class AllayCommand {
                     .then(fragileObsidian)
                     .then(superTNT)
                     .then(fragileGlass)
+                    .then(experienceBottle)
                     .then(damageIndicator)
                     .then(setDefault)
                     .then(removeDefault)
@@ -169,6 +175,7 @@ public class AllayCommand {
         if ("fragileObsidian".equals(ruleName)) mgr.setFragileObsidian(value);
         else if ("superTNT".equals(ruleName)) mgr.setSuperTNT(value);
         else if ("fragileGlass".equals(ruleName)) mgr.setFragileGlass(value);
+        else if ("experienceBottle".equals(ruleName)) mgr.setExperienceBottle(value);
 
         String permCmd = "allay setDefault " + ruleName + " " + value;
         MutableComponent msg = Component.literal(displayName + "已" + (value ? "开启" : "关闭"))

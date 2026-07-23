@@ -107,6 +107,8 @@ public final class AllayChatInterface {
                 .append(suggestBtn("[改]", ALLAY + " superTNT ")));
         src.sendSystemMessage(Component.literal("  易碎玻璃: " + (mgr.isFragileGlass() ? "开" : "关") + "  ")
                 .append(suggestBtn("[改]", ALLAY + " fragileGlass ")));
+        src.sendSystemMessage(Component.literal("  经验玻璃瓶: " + (mgr.isExperienceBottle() ? "开" : "关") + "  ")
+                .append(suggestBtn("[改]", ALLAY + " experienceBottle ")));
 
         src.sendSystemMessage(Component.literal("").append(back(ALLAY)));
         return 1;
@@ -120,6 +122,7 @@ public final class AllayChatInterface {
             {"fragileObsidian", "易碎黑曜石", "黑曜石挖掘速度等同石头"},
             {"superTNT", "超级TNT", "TNT可破坏黑曜石和刷怪笼"},
             {"fragileGlass", "易碎玻璃", "所有玻璃方块/板可被镐子秒破"},
+            {"experienceBottle", "经验玻璃瓶", "Shift+右键玻璃瓶将3-11经验点转换为附魔瓶"},
             {"damageIndicator", "伤害跳字", "攻击时在目标上方显示伤害数值（每玩家独立）"},
     };
 

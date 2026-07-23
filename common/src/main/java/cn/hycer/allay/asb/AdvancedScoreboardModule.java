@@ -1,6 +1,7 @@
 package cn.hycer.allay.asb;
 
 import cn.hycer.allay.Allay;
+import cn.hycer.allay.feature.ExperienceBottle;
 import cn.hycer.allay.feature.damage.DamageIndicator;
 import cn.hycer.allay.feature.damage.DamageIndicatorHook;
 import cn.hycer.allay.feature.PlayerPrefs;
@@ -30,6 +31,7 @@ public class AdvancedScoreboardModule {
         });
 
         DamageIndicatorHook.register();
+        ExperienceBottle.register();
 
         PlayerBlockBreakEvents.AFTER.register(((world, playerEntity, blockPos, blockState, blockEntity) ->
                 PlayerBreakBlockEvent.onBreak(playerEntity)));
