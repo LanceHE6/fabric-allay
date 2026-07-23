@@ -183,7 +183,7 @@ public final class ChatInterface {
     private static MutableComponent suggest(MutableComponent label, String cmd) {
         return label
                 .withStyle(s -> s
-                        .withClickEvent(new ClickEvent.SuggestCommand(cmd))
+                        .withClickEvent(new ClickEvent.SuggestCommand("/" + cmd))
                         .withHoverEvent(new HoverEvent.ShowText(Component.literal(cmd)))
                         .withColor(TextColor.fromRgb(0x55FF55)));
     }

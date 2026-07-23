@@ -184,7 +184,7 @@ public class AllayCommand {
         else if ("experienceBottle".equals(ruleName)) mgr.setExperienceBottle(value);
         else if ("phantomSuppressor".equals(ruleName)) mgr.setPhantomSuppressor(value);
 
-        String permCmd = "allay setDefault " + ruleName + " " + value;
+        String permCmd = "/allay setDefault " + ruleName + " " + value;
         MutableComponent msg = Component.literal(displayName + "已" + (value ? "开启" : "关闭"))
                 .append(Component.literal("  [永久更改？]")
                         .withStyle(s -> s

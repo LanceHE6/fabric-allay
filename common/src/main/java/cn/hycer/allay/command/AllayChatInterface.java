@@ -101,16 +101,26 @@ public final class AllayChatInterface {
 
         var mgr = FeatureManager.getInstance();
         src.sendSystemMessage(subtitle("功能开关"));
-        src.sendSystemMessage(Component.literal("  易碎黑曜石: " + (mgr.isFragileObsidian() ? "开" : "关") + "  ")
-                .append(suggestBtn("[改]", ALLAY + " fragileObsidian ")));
-        src.sendSystemMessage(Component.literal("  超级TNT: " + (mgr.isSuperTNT() ? "开" : "关") + "  ")
-                .append(suggestBtn("[改]", ALLAY + " superTNT ")));
-        src.sendSystemMessage(Component.literal("  易碎玻璃: " + (mgr.isFragileGlass() ? "开" : "关") + "  ")
-                .append(suggestBtn("[改]", ALLAY + " fragileGlass ")));
-        src.sendSystemMessage(Component.literal("  经验玻璃瓶: " + (mgr.isExperienceBottle() ? "开" : "关") + "  ")
-                .append(suggestBtn("[改]", ALLAY + " experienceBottle ")));
-        src.sendSystemMessage(Component.literal("  幻翼抑制器: " + (mgr.isPhantomSuppressor() ? "开" : "关") + "  ")
-                .append(suggestBtn("[改]", ALLAY + " phantomSuppressor ")));
+
+        boolean fo = mgr.isFragileObsidian();
+        src.sendSystemMessage(Component.literal("  易碎黑曜石: " + (fo ? "开" : "关") + "  ")
+                .append(suggestBtn("[改]", ALLAY + " fragileObsidian " + !fo)));
+
+        boolean st = mgr.isSuperTNT();
+        src.sendSystemMessage(Component.literal("  超级TNT: " + (st ? "开" : "关") + "  ")
+                .append(suggestBtn("[改]", ALLAY + " superTNT " + !st)));
+
+        boolean fg = mgr.isFragileGlass();
+        src.sendSystemMessage(Component.literal("  易碎玻璃: " + (fg ? "开" : "关") + "  ")
+                .append(suggestBtn("[改]", ALLAY + " fragileGlass " + !fg)));
+
+        boolean eb = mgr.isExperienceBottle();
+        src.sendSystemMessage(Component.literal("  经验玻璃瓶: " + (eb ? "开" : "关") + "  ")
+                .append(suggestBtn("[改]", ALLAY + " experienceBottle " + !eb)));
+
+        boolean ps = mgr.isPhantomSuppressor();
+        src.sendSystemMessage(Component.literal("  幻翼抑制器: " + (ps ? "开" : "关") + "  ")
+                .append(suggestBtn("[改]", ALLAY + " phantomSuppressor " + !ps)));
 
         src.sendSystemMessage(Component.literal("").append(back(ALLAY)));
         return 1;
@@ -149,7 +159,14 @@ public final class AllayChatInterface {
             if (isPerPlayer) {
                 current = uuid != null && cn.hycer.allay.feature.PlayerPrefs.isDamageIndicatorOn(uuid);
             } else {
-                current = "fragileObsidian".equals(name) ? mgr.isFragileObsidian() : mgr.isSuperTNT();
+                current = switch (name) {
+                    case "fragileObsidian" -> mgr.isFragileObsidian();
+                    case "superTNT" -> mgr.isSuperTNT();
+                    case "fragileGlass" -> mgr.isFragileGlass();
+                    case "experienceBottle" -> mgr.isExperienceBottle();
+                    case "phantomSuppressor" -> mgr.isPhantomSuppressor();
+                    default -> false;
+                };
             }
 
             String status = current ? "§a开" : "§c关";
@@ -328,11 +345,11 @@ public final class AllayChatInterface {
                         .withColor(TextColor.fromRgb(0x55FFFF)));
     }
 
-    /** Click-to-suggest button (fills chat bar) */
+    /** Click-to-suggest button (fills chat bar) — needs / prefix */
     private static MutableComponent suggestBtn(String label, String cmd) {
         return Component.literal(label)
                 .withStyle(s -> s
-                        .withClickEvent(new ClickEvent.SuggestCommand(cmd))
+                        .withClickEvent(new ClickEvent.SuggestCommand("/" + cmd))
                         .withHoverEvent(new HoverEvent.ShowText(Component.literal("输入: " + cmd)))
                         .withColor(TextColor.fromRgb(0x55FF55)));
     }
