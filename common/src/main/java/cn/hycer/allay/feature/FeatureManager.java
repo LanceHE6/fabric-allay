@@ -9,6 +9,8 @@ public class FeatureManager {
     private boolean fragileGlass;
     private boolean experienceBottle;
     private boolean phantomSuppressor;
+    private boolean elytraRecipe;
+    private boolean spongeRecipe;
 
     private FeatureManager() {
         reloadDefaults();
@@ -23,6 +25,8 @@ public class FeatureManager {
         fragileGlass  = cfg.hasFeatureDefault("fragileGlass")  && cfg.getFeatureDefault("fragileGlass");
         experienceBottle = cfg.hasFeatureDefault("experienceBottle") && cfg.getFeatureDefault("experienceBottle");
         phantomSuppressor = cfg.hasFeatureDefault("phantomSuppressor") && cfg.getFeatureDefault("phantomSuppressor");
+        elytraRecipe  = cfg.hasFeatureDefault("elytraRecipe")  && cfg.getFeatureDefault("elytraRecipe");
+        spongeRecipe  = cfg.hasFeatureDefault("spongeRecipe")  && cfg.getFeatureDefault("spongeRecipe");
     }
 
     public boolean isFragileObsidian() { return fragileObsidian; }
@@ -39,4 +43,12 @@ public class FeatureManager {
 
     public boolean isPhantomSuppressor() { return phantomSuppressor; }
     public void setPhantomSuppressor(boolean v) { this.phantomSuppressor = v; }
+
+    /** 鞘翅合成配方开关（切换后需调用 CraftRecipes.syncFromFeatures 使配方生效） */
+    public boolean isElytraRecipe() { return elytraRecipe; }
+    public void setElytraRecipe(boolean v) { this.elytraRecipe = v; }
+
+    /** 海绵合成配方开关（切换后需调用 CraftRecipes.syncFromFeatures 使配方生效） */
+    public boolean isSpongeRecipe() { return spongeRecipe; }
+    public void setSpongeRecipe(boolean v) { this.spongeRecipe = v; }
 }
