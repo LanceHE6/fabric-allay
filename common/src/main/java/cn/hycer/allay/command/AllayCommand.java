@@ -8,6 +8,7 @@ import cn.hycer.allay.cbm.command.tree.*;
 import cn.hycer.allay.config.AllayConfig;
 import cn.hycer.allay.feature.FeatureManager;
 import cn.hycer.allay.feature.HereManager;
+import cn.hycer.allay.feature.recipe.CraftRecipes;
 import cn.hycer.allay.tk.TrialKeeperCommand;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -15,7 +16,13 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.*;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+
+import java.util.function.Supplier;
 
 import static net.minecraft.commands.Commands.argument;
 import static net.minecraft.commands.Commands.literal;
@@ -85,6 +92,21 @@ public class AllayCommand {
                             .executes(ctx -> featureToggle(ctx, "phantomSuppressor",
                                     "幻翼抑制器", BoolArgumentType.getBool(ctx, "value"))));
 
+            // Recipe toggles: /allay elytraRecipe true|false, /allay spongeRecipe true|false
+            var elytraRecipe = literal("elytraRecipe")
+                    .then(argument("value", BoolArgumentType.bool())
+                            .executes(ctx -> recipeToggle(ctx, "elytraRecipe",
+                                    "鞘翅合成", CraftRecipes.ELYTRA_KEY,
+                                    CraftRecipes::buildElytraRecipeHolder,
+                                    BoolArgumentType.getBool(ctx, "value"))));
+
+            var spongeRecipe = literal("spongeRecipe")
+                    .then(argument("value", BoolArgumentType.bool())
+                            .executes(ctx -> recipeToggle(ctx, "spongeRecipe",
+                                    "海绵合成", CraftRecipes.SPONGE_KEY,
+                                    CraftRecipes::buildSpongeRecipeHolder,
+                                    BoolArgumentType.getBool(ctx, "value"))));
+
             // Per-player toggle: /allay damageIndicator true|false
             var damageIndicator = literal("damageIndicator")
                     .then(argument("value", BoolArgumentType.bool())
@@ -150,6 +172,8 @@ public class AllayCommand {
                     .then(fragileGlass)
                     .then(experienceBottle)
                     .then(phantomSuppressor)
+                    .then(elytraRecipe)
+                    .then(spongeRecipe)
                     .then(damageIndicator)
                     .then(setDefault)
                     .then(removeDefault)
@@ -183,6 +207,36 @@ public class AllayCommand {
         else if ("fragileGlass".equals(ruleName)) mgr.setFragileGlass(value);
         else if ("experienceBottle".equals(ruleName)) mgr.setExperienceBottle(value);
         else if ("phantomSuppressor".equals(ruleName)) mgr.setPhantomSuppressor(value);
+
+        String permCmd = "/allay setDefault " + ruleName + " " + value;
+        MutableComponent msg = Component.literal(displayName + "已" + (value ? "开启" : "关闭"))
+                .append(Component.literal("  [永久更改？]")
+                        .withStyle(s -> s
+                                .withClickEvent(new ClickEvent.SuggestCommand(permCmd))
+                                .withHoverEvent(new HoverEvent.ShowText(Component.literal(permCmd)))
+                                .withColor(TextColor.fromRgb(0x5555FF))));
+
+        src.sendSuccess(() -> msg, false);
+        return 1;
+    }
+
+    /**
+     * Recipe toggle: 更新 FeatureManager + 即时注入/移除配方并广播配方书，
+     * 同样提供「永久更改？」可点击链接。
+     */
+    private static int recipeToggle(com.mojang.brigadier.context.CommandContext<CommandSourceStack> ctx,
+                                    String ruleName, String displayName,
+                                    ResourceKey<Recipe<?>> recipeKey,
+                                    Supplier<RecipeHolder<ShapedRecipe>> holderFactory,
+                                    boolean value) {
+        var src = ctx.getSource();
+        var mgr = FeatureManager.getInstance();
+
+        if ("elytraRecipe".equals(ruleName)) mgr.setElytraRecipe(value);
+        else if ("spongeRecipe".equals(ruleName)) mgr.setSpongeRecipe(value);
+
+        // 即时生效：注入或移除配方，并向在线玩家广播配方书变更
+        CraftRecipes.applySingle(src.getServer(), recipeKey, holderFactory.get(), value);
 
         String permCmd = "/allay setDefault " + ruleName + " " + value;
         MutableComponent msg = Component.literal(displayName + "已" + (value ? "开启" : "关闭"))

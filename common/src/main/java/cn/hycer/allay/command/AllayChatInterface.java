@@ -122,7 +122,16 @@ public final class AllayChatInterface {
         src.sendSystemMessage(Component.literal("  幻翼抑制器: " + (ps ? "开" : "关") + "  ")
                 .append(suggestBtn("[改]", ALLAY + " phantomSuppressor " + !ps)));
 
-        src.sendSystemMessage(Component.literal("").append(back(ALLAY)));
+        boolean er = mgr.isElytraRecipe();
+        src.sendSystemMessage(Component.literal("  鞘翅合成: " + (er ? "开" : "关") + "  ")
+                .append(suggestBtn("[改]", ALLAY + " elytraRecipe " + !er)));
+
+        boolean sr = mgr.isSpongeRecipe();
+        src.sendSystemMessage(Component.literal("  海绵合成: " + (sr ? "开" : "关") + "  ")
+                .append(suggestBtn("[改]", ALLAY + " spongeRecipe " + !sr)));
+
+        src.sendSystemMessage(Component.literal("")
+                .append(back(ALLAY)));
         return 1;
     }
 
@@ -136,6 +145,8 @@ public final class AllayChatInterface {
             {"fragileGlass", "易碎玻璃", "所有玻璃方块/板可被镐子秒破"},
             {"experienceBottle", "经验玻璃瓶", "Shift+右键玻璃瓶将3-11经验点转换为附魔瓶"},
             {"phantomSuppressor", "幻翼抑制器", "阻止幻翼自然生成"},
+            {"elytraRecipe", "鞘翅合成", "工作台合成鞘翅：幻翼膜×6+线×1+下界合金锭×1 → 鞘翅×1"},
+            {"spongeRecipe", "海绵合成", "工作台合成海绵：沙子×4(角)+纸×4(边)+黄色羊毛×1(中心) → 海绵×2"},
             {"damageIndicator", "伤害跳字", "攻击时在目标上方显示伤害数值（每玩家独立）"},
     };
 
@@ -165,6 +176,8 @@ public final class AllayChatInterface {
                     case "fragileGlass" -> mgr.isFragileGlass();
                     case "experienceBottle" -> mgr.isExperienceBottle();
                     case "phantomSuppressor" -> mgr.isPhantomSuppressor();
+                    case "elytraRecipe" -> mgr.isElytraRecipe();
+                    case "spongeRecipe" -> mgr.isSpongeRecipe();
                     default -> false;
                 };
             }
