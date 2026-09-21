@@ -2,6 +2,7 @@ package cn.hycer.allay.feature.recipe;
 
 import cn.hycer.allay.Allay;
 import cn.hycer.allay.feature.FeatureManager;
+import cn.hycer.allay.util.VersionCompat;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -223,7 +224,7 @@ public final class CraftRecipes {
             throws ReflectiveOperationException {
         synchronized (CraftRecipes.class) {
             FeatureFlagSet flags = server.getWorldData().enabledFeatures();
-            recipesField.set(mgr, RecipeMap.create(values));
+            recipesField.set(mgr, VersionCompat.createRecipeMap(values));
             mgr.finalizeRecipeLoading(flags);
         }
     }

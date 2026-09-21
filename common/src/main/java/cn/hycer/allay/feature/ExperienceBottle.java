@@ -1,5 +1,6 @@
 package cn.hycer.allay.feature;
 
+import cn.hycer.allay.util.VersionCompat;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -43,7 +44,7 @@ public class ExperienceBottle {
             // Give experience bottle
             ItemStack bottle = new ItemStack(Items.EXPERIENCE_BOTTLE);
             if (!sp.getInventory().add(bottle)) {
-                sp.drop(bottle, false);
+                VersionCompat.dropItem(sp, bottle, false);
             }
 
             // Sound

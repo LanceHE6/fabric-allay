@@ -5,8 +5,8 @@
 一个 Minecraft Fabric 服务端辅助模组，提供计分板统计、假人管理、试炼区块保护、位置共享以及内置特性开关。全部功能通过 `/allay` 指令系统统一操作，支持聊天交互 UI，无需客户端安装任何 mod。
 
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE.txt)
-[![Minecraft](https://img.shields.io/badge/Minecraft-26.1~26.2-blue)](gradle.properties)
-[![Fabric](https://img.shields.io/badge/Fabric_API-0.145.1~0.154.0-yellow)](gradle.properties)
+[![Minecraft](https://img.shields.io/badge/Minecraft-26.1~26.3-blue)](gradle.properties)
+[![Fabric](https://img.shields.io/badge/Fabric_API-0.145.1~0.159.3-yellow)](gradle.properties)
 
 ---
 
@@ -109,8 +109,8 @@ config/allay/
 
 ## 前置依赖
 
-- Minecraft 26.1 ~ 26.2
-- Fabric Loader >= 0.19.3
+- Minecraft 26.1 ~ 26.3
+- Fabric Loader >= 0.19.5
 - Fabric API
 
 ---
@@ -119,7 +119,7 @@ config/allay/
 
 ```bash
 ./gradlew buildAll          # 构建全部版本
-./gradlew :mc-26.2:build    # 构建单个版本
+./gradlew :mc-26.3:build    # 构建单个版本
 ./gradlew collectJars       # 收集产物到 dist/
 ```
 
@@ -138,7 +138,7 @@ allay/
 │   ├── asb/                               # 计分板
 │   ├── cbm/                               # 假人管理
 │   └── tk/                                # 试炼区块
-├── mc-26.2/ mc-26.1.2/ mc-26.1.1/ mc-26.1/  # 多版本子项目
+├── mc-26.3/ mc-26.2/ mc-26.1.2/ mc-26.1.1/ mc-26.1/  # 多版本子项目
 ├── build.gradle / settings.gradle
 └── .github/workflows/build-release.yml    # CI/CD
 ```
