@@ -2,7 +2,7 @@
 <img src="https://socialify.git.ci/LanceHE6/fabric-allay/image?font=JetBrains+Mono&forks=1&issues=1&language=1&logo=https%3A%2F%2Fr2-api.hycer.cn%2Fimg%2Ffabric-allay-icon.png&name=1&pattern=Floating+Cogs&stargazers=1&theme=Dark" alt="fabric-allay" width="640" height="320" />
 </p>
 
-一个 Minecraft Fabric 服务端辅助模组，提供计分板统计、假人管理、试炼区块保护、位置共享以及内置特性开关。全部功能通过 `/allay` 指令系统统一操作，支持聊天交互 UI，无需客户端安装任何 mod。
+一个 Minecraft Fabric 服务端辅助模组，提供计分板统计、假人管理、试炼区块保护、位置共享、空间测距以及内置特性开关。全部功能通过 `/allay` 指令系统统一操作，支持聊天交互 UI，无需客户端安装任何 mod。
 
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE.txt)
 [![Minecraft](https://img.shields.io/badge/Minecraft-26.1~26.3-blue)](gradle.properties)
@@ -37,7 +37,16 @@ vault / trial spawner / ominous vault 保存与恢复，敏感操作两步确认
 - 同维度玩家 ActionBar 实时显示目标方向箭头 + 距离 + 倒计时
 - `to <玩家>` 仅对指定玩家显示
 
-### 特性开关
+### 空间测距 (`/dist [<pos1>] [<pos2>]`)
+
+纯服务端实现的 3D 空间测距工具，支持服务端粒子线视觉反馈：
+
+- **射线模式 (`/dist`)**：以玩家脚底为起点，向准星方向发射射线检测目标方块（最大 128 格）。
+- **点选模式 (`/dist <pos1> <pos2>`)**：输入指令时自动提示视角指向方块坐标，一步直达两点测距。
+- **结构化输出**：直线欧氏距离、水平距离 (XZ)、轴向跨度 ($\Delta X, \Delta Y, \Delta Z$) 以及包围盒方块总数（含端点）。
+- **视觉反馈**：两点间生成末地烛粒子连线，并在端点产生高亮标记粒子。
+
+### 特性开关与通知系统
 
 全局特性（临时/永久）：
 
@@ -48,12 +57,20 @@ vault / trial spawner / ominous vault 保存与恢复，敏感操作两步确认
 | fragileGlass | 所有玻璃方块/板可被秒破 |
 | experienceBottle | Shift+右键玻璃瓶将经验点转换为附魔瓶 |
 | phantomSuppressor | 阻止幻翼自然生成 |
+| jungleSaplingDropRate | 提高丛林树叶掉落树苗几率至常规树叶水平（5%） |
+| elytraRecipe | 工作台合成鞘翅（幻翼膜×6+线×1+下界合金锭×1） |
+| spongeRecipe | 工作台合成海绵（沙子×4+纸×4+黄色羊毛×1） |
 
 个人特性（每玩家独立）：
 
 | 特性 | 说明 |
 |------|------|
 | damageIndicator | 伤害跳字（普通红色，暴击深红加粗 *） |
+
+**安全与提示机制**：
+- **变更全服广播**：任意玩家切换全局特性或修改永久默认值时，全服聊天框同步高亮广播。
+- **进服状态提醒**：玩家登录时，若服务器当前启用了特殊特性，单播提醒已启用的特性列表。
+- **准星 Action Bar 防误触预警**：当开启 `易碎玻璃` 或 `易碎黑曜石` 时，玩家手持镐子瞄准相应方块，屏幕下方动作栏实时弹出红色预警，移开后自动消失。
 
 ---
 
@@ -62,12 +79,16 @@ vault / trial spawner / ominous vault 保存与恢复，敏感操作两步确认
 ```
 /allay
 ├── here [to <玩家>]                    # 位置共享
+├── dist [<pos1>] [<pos2>]              # 空间测距 / 射线测距
 ├── help / config / features
 ├── fragileObsidian <true|false>        # 全局特性
 ├── superTNT <true|false>
 ├── fragileGlass <true|false>
 ├── experienceBottle <true|false>
 ├── phantomSuppressor <true|false>
+├── jungleSaplingDropRate <true|false>
+├── elytraRecipe <true|false>
+├── spongeRecipe <true|false>
 ├── damageIndicator <true|false>         # 个人特性
 ├── setDefault <规则> <true|false>       # 永久设置
 ├── removeDefault <规则>
@@ -84,7 +105,7 @@ vault / trial spawner / ominous vault 保存与恢复，敏感操作两步确认
     └── ...
 ```
 
-快捷别名：`/asb` `/cbot` `/trialkeeper` `/here`
+快捷别名：`/asb` `/cbot` `/trialkeeper` `/here` `/dist`
 
 ---
 
@@ -133,7 +154,7 @@ allay/
 │   ├── Allay.java                         # 主入口
 │   ├── command/                           # 根指令 + 聊天UI
 │   ├── config/                            # 全局配置类
-│   ├── feature/                           # 特性管理 + 伤害跳字 + 位置共享
+│   ├── feature/                           # 特性管理 + 测距 + 提醒 + 伤害跳字 + 位置共享
 │   ├── mixin/                             # Mixin
 │   ├── asb/                               # 计分板
 │   ├── cbm/                               # 假人管理

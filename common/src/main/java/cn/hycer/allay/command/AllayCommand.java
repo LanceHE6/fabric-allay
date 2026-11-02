@@ -8,6 +8,9 @@ import cn.hycer.allay.cbm.command.tree.*;
 import cn.hycer.allay.config.AllayConfig;
 import cn.hycer.allay.feature.FeatureManager;
 import cn.hycer.allay.feature.HereManager;
+import cn.hycer.allay.feature.DistanceMeasure;
+import cn.hycer.allay.feature.FeatureNotifier;
+import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import cn.hycer.allay.feature.recipe.CraftRecipes;
 import cn.hycer.allay.tk.TrialKeeperCommand;
 import com.mojang.brigadier.arguments.BoolArgumentType;
@@ -92,6 +95,11 @@ public class AllayCommand {
                             .executes(ctx -> featureToggle(ctx, "phantomSuppressor",
                                     "幻翼抑制器", BoolArgumentType.getBool(ctx, "value"))));
 
+            var jungleSaplingDropRate = literal("jungleSaplingDropRate")
+                    .then(argument("value", BoolArgumentType.bool())
+                            .executes(ctx -> featureToggle(ctx, "jungleSaplingDropRate",
+                                    "丛林树苗爆率调整", BoolArgumentType.getBool(ctx, "value"))));
+
             // Recipe toggles: /allay elytraRecipe true|false, /allay spongeRecipe true|false
             var elytraRecipe = literal("elytraRecipe")
                     .then(argument("value", BoolArgumentType.bool())
@@ -133,6 +141,23 @@ public class AllayCommand {
                             .executes(ctx -> removeFeatureDefault(ctx,
                                     StringArgumentType.getString(ctx, "rule"))));
 
+            // ── /allay dist ──────────────────────────────────
+            // /allay dist                  — 射线测距 (脚底 -> 准星所指方块)
+            // /allay dist <pos1> <pos2>     — 两点测距
+            var dist = literal("dist")
+                    .executes(ctx -> {
+                        ServerPlayer player = ctx.getSource().getPlayerOrException();
+                        return DistanceMeasure.executeRaycast(player);
+                    })
+                    .then(argument("pos1", BlockPosArgument.blockPos())
+                            .then(argument("pos2", BlockPosArgument.blockPos())
+                                    .executes(ctx -> {
+                                        ServerPlayer player = ctx.getSource().getPlayerOrException();
+                                        var p1 = BlockPosArgument.getLoadedBlockPos(ctx, "pos1");
+                                        var p2 = BlockPosArgument.getLoadedBlockPos(ctx, "pos2");
+                                        return DistanceMeasure.executeTwoPoints(player, p1, p2);
+                                    })));
+
             // ── /allay here ──────────────────────────────────
             // /allay here [to <target>] — broadcast position, optional direction to target
 
@@ -172,11 +197,13 @@ public class AllayCommand {
                     .then(fragileGlass)
                     .then(experienceBottle)
                     .then(phantomSuppressor)
+                    .then(jungleSaplingDropRate)
                     .then(elytraRecipe)
                     .then(spongeRecipe)
                     .then(damageIndicator)
                     .then(setDefault)
                     .then(removeDefault)
+                    .then(dist)
                     .then(here)
                     .then(asb)
                     .then(cbot)
@@ -189,6 +216,8 @@ public class AllayCommand {
                     dispatcher.getRoot().getChild("allay").getChild("cbot")));
             dispatcher.register(literal("trialkeeper").redirect(
                     dispatcher.getRoot().getChild("allay").getChild("tk")));
+            dispatcher.register(literal("dist").redirect(
+                    dispatcher.getRoot().getChild("allay").getChild("dist")));
             dispatcher.register(literal("here").redirect(
                     dispatcher.getRoot().getChild("allay").getChild("here")));
         });
@@ -207,6 +236,7 @@ public class AllayCommand {
         else if ("fragileGlass".equals(ruleName)) mgr.setFragileGlass(value);
         else if ("experienceBottle".equals(ruleName)) mgr.setExperienceBottle(value);
         else if ("phantomSuppressor".equals(ruleName)) mgr.setPhantomSuppressor(value);
+        else if ("jungleSaplingDropRate".equals(ruleName)) mgr.setJungleSaplingDropRate(value);
 
         String permCmd = "/allay setDefault " + ruleName + " " + value;
         MutableComponent msg = Component.literal(displayName + "已" + (value ? "开启" : "关闭"))
@@ -217,6 +247,8 @@ public class AllayCommand {
                                 .withColor(TextColor.fromRgb(0x5555FF))));
 
         src.sendSuccess(() -> msg, false);
+        String playerName = src.getTextName();
+        FeatureNotifier.broadcastFeatureChange(src.getServer(), playerName, displayName, value);
         return 1;
     }
 
@@ -247,6 +279,8 @@ public class AllayCommand {
                                 .withColor(TextColor.fromRgb(0x5555FF))));
 
         src.sendSuccess(() -> msg, false);
+        String playerName = src.getTextName();
+        FeatureNotifier.broadcastFeatureChange(src.getServer(), playerName, displayName, value);
         return 1;
     }
 
@@ -261,6 +295,9 @@ public class AllayCommand {
         mgr.reloadDefaults();
 
         src.sendSuccess(() -> Component.literal("已将 " + rule + " 永久设为 " + value), true);
+        String playerName = src.getTextName();
+        String display = FeatureNotifier.getFeatureDisplayName(rule);
+        FeatureNotifier.broadcastDefaultChange(src.getServer(), playerName, rule, display, value);
         return 1;
     }
 

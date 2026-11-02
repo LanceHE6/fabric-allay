@@ -14,7 +14,8 @@
     "ArmorStandDamageMixin",
     "TextDisplayAccessor",
     "TextDisplayInvoker",
-    "PhantomSuppressorMixin"
+    "PhantomSuppressorMixin",
+    "JungleSaplingDropRateMixin"
   ],
   "injectors": {
     "defaultRequire": 1

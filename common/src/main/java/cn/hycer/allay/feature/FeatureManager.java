@@ -11,6 +11,7 @@ public class FeatureManager {
     private boolean phantomSuppressor;
     private boolean elytraRecipe;
     private boolean spongeRecipe;
+    private boolean jungleSaplingDropRate;
 
     private FeatureManager() {
         reloadDefaults();
@@ -27,6 +28,7 @@ public class FeatureManager {
         phantomSuppressor = cfg.hasFeatureDefault("phantomSuppressor") && cfg.getFeatureDefault("phantomSuppressor");
         elytraRecipe  = cfg.hasFeatureDefault("elytraRecipe")  && cfg.getFeatureDefault("elytraRecipe");
         spongeRecipe  = cfg.hasFeatureDefault("spongeRecipe")  && cfg.getFeatureDefault("spongeRecipe");
+        jungleSaplingDropRate = cfg.hasFeatureDefault("jungleSaplingDropRate") && cfg.getFeatureDefault("jungleSaplingDropRate");
     }
 
     public boolean isFragileObsidian() { return fragileObsidian; }
@@ -51,4 +53,8 @@ public class FeatureManager {
     /** 海绵合成配方开关（切换后需调用 CraftRecipes.syncFromFeatures 使配方生效） */
     public boolean isSpongeRecipe() { return spongeRecipe; }
     public void setSpongeRecipe(boolean v) { this.spongeRecipe = v; }
+
+    /** 调整丛林树苗爆率开关（提升至常规树叶爆率水平） */
+    public boolean isJungleSaplingDropRate() { return jungleSaplingDropRate; }
+    public void setJungleSaplingDropRate(boolean v) { this.jungleSaplingDropRate = v; }
 }

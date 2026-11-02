@@ -60,6 +60,7 @@ public final class AllayChatInterface {
         src.sendSystemMessage(Component.literal("  /allay cbot batch ...       批量操作"));
         src.sendSystemMessage(Component.literal("  /allay tk remove <名> <起> <止>  移除并保存试炼区块"));
         src.sendSystemMessage(Component.literal("  /allay tk restore <名称>     恢复试炼区块"));
+        src.sendSystemMessage(Component.literal("  /dist [<pos1>] [<pos2>]      快速测距/射线测距"));
         src.sendSystemMessage(Component.literal(""));
         src.sendSystemMessage(back(ALLAY));
         return 1;
@@ -130,6 +131,10 @@ public final class AllayChatInterface {
         src.sendSystemMessage(Component.literal("  海绵合成: " + (sr ? "开" : "关") + "  ")
                 .append(suggestBtn("[改]", ALLAY + " spongeRecipe " + !sr)));
 
+        boolean js = mgr.isJungleSaplingDropRate();
+        src.sendSystemMessage(Component.literal("  丛林树苗爆率调整: " + (js ? "开" : "关") + "  ")
+                .append(suggestBtn("[改]", ALLAY + " jungleSaplingDropRate " + !js)));
+
         src.sendSystemMessage(Component.literal("")
                 .append(back(ALLAY)));
         return 1;
@@ -147,6 +152,7 @@ public final class AllayChatInterface {
             {"phantomSuppressor", "幻翼抑制器", "阻止幻翼自然生成"},
             {"elytraRecipe", "鞘翅合成", "工作台合成鞘翅：幻翼膜×6+线×1+下界合金锭×1 → 鞘翅×1"},
             {"spongeRecipe", "海绵合成", "工作台合成海绵：沙子×4(角)+纸×4(边)+黄色羊毛×1(中心) → 海绵×2"},
+            {"jungleSaplingDropRate", "丛林树苗爆率", "提高丛林树叶掉落树苗的几率至与普通树叶相同水平（5%）"},
             {"damageIndicator", "伤害跳字", "攻击时在目标上方显示伤害数值（每玩家独立）"},
     };
 
@@ -178,6 +184,7 @@ public final class AllayChatInterface {
                     case "phantomSuppressor" -> mgr.isPhantomSuppressor();
                     case "elytraRecipe" -> mgr.isElytraRecipe();
                     case "spongeRecipe" -> mgr.isSpongeRecipe();
+                    case "jungleSaplingDropRate" -> mgr.isJungleSaplingDropRate();
                     default -> false;
                 };
             }

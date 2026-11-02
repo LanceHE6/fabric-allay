@@ -27,6 +27,7 @@ public class Allay implements ModInitializer {
         AllayCommand.register();
 
         // Initialize sub-modules
+        cn.hycer.allay.feature.FeatureNotifier.init();
         cn.hycer.allay.feature.recipe.CraftRecipes.init();
         cn.hycer.allay.feature.recipe.RecipeMatchTest.register();
         AdvancedScoreboardModule.init();
