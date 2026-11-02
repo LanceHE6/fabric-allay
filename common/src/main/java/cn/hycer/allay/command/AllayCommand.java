@@ -95,6 +95,11 @@ public class AllayCommand {
                             .executes(ctx -> featureToggle(ctx, "phantomSuppressor",
                                     "幻翼抑制器", BoolArgumentType.getBool(ctx, "value"))));
 
+            var patrolSuppressor = literal("patrolSuppressor")
+                    .then(argument("value", BoolArgumentType.bool())
+                            .executes(ctx -> featureToggle(ctx, "patrolSuppressor",
+                                    "灾厄巡逻队抑制器", BoolArgumentType.getBool(ctx, "value"))));
+
             var jungleSaplingDropRate = literal("jungleSaplingDropRate")
                     .then(argument("value", BoolArgumentType.bool())
                             .executes(ctx -> featureToggle(ctx, "jungleSaplingDropRate",
@@ -197,6 +202,7 @@ public class AllayCommand {
                     .then(fragileGlass)
                     .then(experienceBottle)
                     .then(phantomSuppressor)
+                    .then(patrolSuppressor)
                     .then(jungleSaplingDropRate)
                     .then(elytraRecipe)
                     .then(spongeRecipe)
@@ -236,6 +242,7 @@ public class AllayCommand {
         else if ("fragileGlass".equals(ruleName)) mgr.setFragileGlass(value);
         else if ("experienceBottle".equals(ruleName)) mgr.setExperienceBottle(value);
         else if ("phantomSuppressor".equals(ruleName)) mgr.setPhantomSuppressor(value);
+        else if ("patrolSuppressor".equals(ruleName)) mgr.setPatrolSuppressor(value);
         else if ("jungleSaplingDropRate".equals(ruleName)) mgr.setJungleSaplingDropRate(value);
 
         String permCmd = "/allay setDefault " + ruleName + " " + value;

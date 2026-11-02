@@ -123,6 +123,10 @@ public final class AllayChatInterface {
         src.sendSystemMessage(Component.literal("  幻翼抑制器: " + (ps ? "开" : "关") + "  ")
                 .append(suggestBtn("[改]", ALLAY + " phantomSuppressor " + !ps)));
 
+        boolean pas = mgr.isPatrolSuppressor();
+        src.sendSystemMessage(Component.literal("  灾厄巡逻队抑制器: " + (pas ? "开" : "关") + "  ")
+                .append(suggestBtn("[改]", ALLAY + " patrolSuppressor " + !pas)));
+
         boolean er = mgr.isElytraRecipe();
         src.sendSystemMessage(Component.literal("  鞘翅合成: " + (er ? "开" : "关") + "  ")
                 .append(suggestBtn("[改]", ALLAY + " elytraRecipe " + !er)));
@@ -150,6 +154,7 @@ public final class AllayChatInterface {
             {"fragileGlass", "易碎玻璃", "所有玻璃方块/板可被镐子秒破"},
             {"experienceBottle", "经验玻璃瓶", "Shift+右键玻璃瓶将3-11经验点转换为附魔瓶"},
             {"phantomSuppressor", "幻翼抑制器", "阻止幻翼自然生成"},
+            {"patrolSuppressor", "灾厄巡逻队抑制器", "阻止灾厄巡逻队自然生成"},
             {"elytraRecipe", "鞘翅合成", "工作台合成鞘翅：幻翼膜×6+线×1+下界合金锭×1 → 鞘翅×1"},
             {"spongeRecipe", "海绵合成", "工作台合成海绵：沙子×4(角)+纸×4(边)+黄色羊毛×1(中心) → 海绵×2"},
             {"jungleSaplingDropRate", "丛林树苗爆率", "提高丛林树叶掉落树苗的几率至与普通树叶相同水平（5%）"},
@@ -182,6 +187,7 @@ public final class AllayChatInterface {
                     case "fragileGlass" -> mgr.isFragileGlass();
                     case "experienceBottle" -> mgr.isExperienceBottle();
                     case "phantomSuppressor" -> mgr.isPhantomSuppressor();
+                    case "patrolSuppressor" -> mgr.isPatrolSuppressor();
                     case "elytraRecipe" -> mgr.isElytraRecipe();
                     case "spongeRecipe" -> mgr.isSpongeRecipe();
                     case "jungleSaplingDropRate" -> mgr.isJungleSaplingDropRate();

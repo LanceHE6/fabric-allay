@@ -15,6 +15,7 @@
     "TextDisplayAccessor",
     "TextDisplayInvoker",
     "PhantomSuppressorMixin",
+    "PatrolSuppressorMixin",
     "JungleSaplingDropRateMixin"
   ],
   "injectors": {

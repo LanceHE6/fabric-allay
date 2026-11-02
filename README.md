@@ -57,6 +57,7 @@ vault / trial spawner / ominous vault 保存与恢复，敏感操作两步确认
 | fragileGlass | 所有玻璃方块/板可被秒破 |
 | experienceBottle | Shift+右键玻璃瓶将经验点转换为附魔瓶 |
 | phantomSuppressor | 阻止幻翼自然生成 |
+| patrolSuppressor | 阻止灾厄巡逻队自然生成 |
 | jungleSaplingDropRate | 提高丛林树叶掉落树苗几率至常规树叶水平（5%） |
 | elytraRecipe | 工作台合成鞘翅（幻翼膜×6+线×1+下界合金锭×1） |
 | spongeRecipe | 工作台合成海绵（沙子×4+纸×4+黄色羊毛×1） |
@@ -86,6 +87,7 @@ vault / trial spawner / ominous vault 保存与恢复，敏感操作两步确认
 ├── fragileGlass <true|false>
 ├── experienceBottle <true|false>
 ├── phantomSuppressor <true|false>
+├── patrolSuppressor <true|false>
 ├── jungleSaplingDropRate <true|false>
 ├── elytraRecipe <true|false>
 ├── spongeRecipe <true|false>

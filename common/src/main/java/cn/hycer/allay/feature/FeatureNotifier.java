@@ -76,6 +76,7 @@ public class FeatureNotifier {
         if (fm.isSuperTNT()) enabledList.add("超级TNT");
         if (fm.isExperienceBottle()) enabledList.add("经验玻璃瓶");
         if (fm.isPhantomSuppressor()) enabledList.add("幻翼抑制器");
+        if (fm.isPatrolSuppressor()) enabledList.add("灾厄巡逻队抑制器");
         if (fm.isJungleSaplingDropRate()) enabledList.add("丛林树苗爆率");
         if (fm.isElytraRecipe()) enabledList.add("鞘翅合成");
         if (fm.isSpongeRecipe()) enabledList.add("海绵合成");
@@ -153,6 +154,7 @@ public class FeatureNotifier {
             case "superTNT" -> "超级TNT";
             case "experienceBottle" -> "经验玻璃瓶";
             case "phantomSuppressor" -> "幻翼抑制器";
+            case "patrolSuppressor" -> "灾厄巡逻队抑制器";
             case "jungleSaplingDropRate" -> "丛林树苗爆率";
             case "elytraRecipe" -> "鞘翅合成";
             case "spongeRecipe" -> "海绵合成";

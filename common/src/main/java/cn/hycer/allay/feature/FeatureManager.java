@@ -9,6 +9,7 @@ public class FeatureManager {
     private boolean fragileGlass;
     private boolean experienceBottle;
     private boolean phantomSuppressor;
+    private boolean patrolSuppressor;
     private boolean elytraRecipe;
     private boolean spongeRecipe;
     private boolean jungleSaplingDropRate;
@@ -26,6 +27,7 @@ public class FeatureManager {
         fragileGlass  = cfg.hasFeatureDefault("fragileGlass")  && cfg.getFeatureDefault("fragileGlass");
         experienceBottle = cfg.hasFeatureDefault("experienceBottle") && cfg.getFeatureDefault("experienceBottle");
         phantomSuppressor = cfg.hasFeatureDefault("phantomSuppressor") && cfg.getFeatureDefault("phantomSuppressor");
+        patrolSuppressor = cfg.hasFeatureDefault("patrolSuppressor") && cfg.getFeatureDefault("patrolSuppressor");
         elytraRecipe  = cfg.hasFeatureDefault("elytraRecipe")  && cfg.getFeatureDefault("elytraRecipe");
         spongeRecipe  = cfg.hasFeatureDefault("spongeRecipe")  && cfg.getFeatureDefault("spongeRecipe");
         jungleSaplingDropRate = cfg.hasFeatureDefault("jungleSaplingDropRate") && cfg.getFeatureDefault("jungleSaplingDropRate");
@@ -45,6 +47,9 @@ public class FeatureManager {
 
     public boolean isPhantomSuppressor() { return phantomSuppressor; }
     public void setPhantomSuppressor(boolean v) { this.phantomSuppressor = v; }
+
+    public boolean isPatrolSuppressor() { return patrolSuppressor; }
+    public void setPatrolSuppressor(boolean v) { this.patrolSuppressor = v; }
 
     /** 鞘翅合成配方开关（切换后需调用 CraftRecipes.syncFromFeatures 使配方生效） */
     public boolean isElytraRecipe() { return elytraRecipe; }
